@@ -21,7 +21,7 @@ export default function Navbar() {
       setScrolled(window.scrollY > 20);
       if (!isHome) return;
       const sections = sectionLinks.map((l) => document.getElementById(l.toLowerCase()));
-      const current = sections.findLast((s) => s && s.getBoundingClientRect().top <= 100);
+      const current = sections.filter((s) => s && s.getBoundingClientRect().top <= 100).pop();
       setActive(current?.id ?? "");
     };
     window.addEventListener("scroll", onScroll, { passive: true });

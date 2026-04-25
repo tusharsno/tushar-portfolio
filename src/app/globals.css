@@ -13,7 +13,6 @@
   --border-2: #2a2a2a;
   --accent-subtle: #1a1a1a;
   --btn-text: #0a0a0a;
-  --glow-color: rgba(200,200,200,0.1);
 }
 
 html:not(.dark) {
@@ -29,7 +28,6 @@ html:not(.dark) {
   --border-2: #cbd5e1;
   --accent-subtle: #f4f4f5;
   --btn-text: #ffffff;
-  --glow-color: rgba(0,0,0,0.06);
 }
 
 @theme inline {
