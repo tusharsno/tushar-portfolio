@@ -32,8 +32,9 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-[var(--card)]">
 
-      {/* Gradient top border */}
+      {/* Gradient top border with glow */}
       <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--border-2)] to-transparent" />
+      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent -mt-px" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 pt-16 pb-8">
 

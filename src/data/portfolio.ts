@@ -1,7 +1,7 @@
 export const personal = {
-  name: "Tushar",
-  title: "Full Stack Developer",
-  tagline: "I build fast, production-ready web apps with Next.js, TypeScript & Node.js — and solve hard algorithmic problems on the side.",
+  name: "Tushar Barua",
+  title: "Next.js Full Stack Developer",
+  tagline: "Building fast, production-ready web apps with Next.js, TypeScript & Node.js — and solving hard problems on the side.",
   roles: ["Full Stack Developer", "Competitive Programmer", "Problem Solver", "ML Enthusiast"],
   email: "tusharcoder269@gmail.com",
   github: "https://github.com/tusharsno",
@@ -89,8 +89,8 @@ export const projects = [
   },
   {
     title: "Heart Disease Predictor",
-    description: "An ML-powered web app that predicts heart disease risk from patient vitals. Trained on clinical datasets using classification algorithms, served via a clean React frontend.",
-    tech: ["Python", "Scikit-learn", "React", "Flask"],
+    description: "An ML-powered web app that predicts heart disease risk from patient vitals. Trained on clinical datasets using classification algorithms, served via a Next.js frontend.",
+    tech: ["Python", "Scikit-learn", "Next.js", "Flask"],
     github: "https://github.com/tusharsno/heart-scan",
     live: "https://heart-scan-three.vercel.app",
     category: "Machine Learning",

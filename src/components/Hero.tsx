@@ -18,7 +18,7 @@ const LinkedinIcon = () => (
 
 const codeLines = [
   { key: "l1", indent: false, tokens: [{ t: "const ", c: "text-[var(--muted)]" }, { t: "dev", c: "text-[var(--foreground)] font-semibold" }, { t: " = {", c: "text-[var(--muted)]" }] },
-  { key: "l2", indent: true,  tokens: [{ t: "name", c: "text-[var(--muted)]" }, { t: ": ", c: "text-[var(--muted)]" }, { t: '"Tushar"', c: "text-[var(--foreground)]" }, { t: ",", c: "text-[var(--muted)]" }] },
+  { key: "l2", indent: true,  tokens: [{ t: "name", c: "text-[var(--muted)]" }, { t: ": ", c: "text-[var(--muted)]" }, { t: '"Tushar Barua"', c: "text-[var(--foreground)]" }, { t: ",", c: "text-[var(--muted)]" }] },
   { key: "l3", indent: true,  tokens: [{ t: "stack", c: "text-[var(--muted)]" }, { t: ": [", c: "text-[var(--muted)]" }, { t: '"Next.js"', c: "text-[var(--foreground)]" }, { t: ", ", c: "text-[var(--muted)]" }, { t: '"TypeScript"', c: "text-[var(--foreground)]" }, { t: ", ", c: "text-[var(--muted)]" }, { t: '"Node.js"', c: "text-[var(--foreground)]" }, { t: "],", c: "text-[var(--muted)]" }] },
   { key: "l4", indent: true,  tokens: [{ t: "cp", c: "text-[var(--muted)]" }, { t: ": ", c: "text-[var(--muted)]" }, { t: '"250+ solved"', c: "text-[var(--foreground)]" }, { t: ",", c: "text-[var(--muted)]" }] },
   { key: "l5", indent: true,  tokens: [{ t: "open", c: "text-[var(--muted)]" }, { t: ": ", c: "text-[var(--muted)]" }, { t: "true", c: "text-[var(--foreground)] font-bold" }] },
