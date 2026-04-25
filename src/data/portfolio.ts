@@ -1,7 +1,7 @@
 export const personal = {
   name: "Tushar",
   title: "Full Stack Developer",
-  tagline: "I build fast, accessible web apps and solve hard algorithmic problems. Currently focused on full-stack development with Next.js & Node.js.",
+  tagline: "I build fast, production-ready web apps with Next.js, TypeScript & Node.js — and solve hard algorithmic problems on the side.",
   roles: ["Full Stack Developer", "Competitive Programmer", "Problem Solver", "ML Enthusiast"],
   email: "tusharcoder269@gmail.com",
   github: "https://github.com/tusharsno",
@@ -12,12 +12,12 @@ export const personal = {
 };
 
 export const about = {
-  bio: "I'm a Full Stack Developer and competitive programmer from Bangladesh. I love solving hard problems — whether it's an algorithmic challenge on Codeforces or architecting a scalable web application. I specialize in the React & Node.js ecosystem and I'm always pushing to write cleaner, faster, and more maintainable code.",
+  bio: "I'm a Full Stack Developer and competitive programmer from Bangladesh. I love solving hard problems — whether it's an algorithmic challenge on Codeforces or architecting a scalable web application. I specialize in Next.js (App Router), TypeScript, and Node.js — building fast, production-ready apps with clean architecture and great user experience.",
   highlights: [
     "Solved 250+ problems on Codeforces across various difficulty ratings",
     "Participated in 20+ competitive programming contests",
     "Actively solving problems on LeetCode to sharpen DSA skills",
-    "Building full-stack projects with Next.js, Prisma & PostgreSQL",
+    "Building full-stack projects with Next.js 16, Prisma & PostgreSQL",
   ],
   stats: [
     { label: "Problems Solved", value: "250+", platform: "Codeforces", color: "#3f3f46" },

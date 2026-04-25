@@ -1,7 +1,7 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { MapPin, Download, ArrowUpRight, Sparkles } from "lucide-react";
+import { MapPin, Download, ArrowUpRight } from "lucide-react";
 import { personal } from "@/data/portfolio";
 
 const GithubIcon = () => (
@@ -28,10 +28,34 @@ const codeLines = [
 export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
 
+  // Typewriter state
+  const fullText = codeLines.map(l =>
+    (l.indent ? "  " : "") + l.tokens.map(t => t.t).join("")
+  ).join("\n");
+  const [displayed, setDisplayed] = useState("");
+  const [charIndex, setCharIndex] = useState(0);
+
   useEffect(() => {
     const t = setInterval(() => setRoleIndex((i) => (i + 1) % personal.roles.length), 2800);
     return () => clearInterval(t);
   }, []);
+
+  useEffect(() => {
+    if (charIndex < fullText.length) {
+      const t = setTimeout(() => {
+        setDisplayed(fullText.slice(0, charIndex + 1));
+        setCharIndex(c => c + 1);
+      }, 28);
+      return () => clearTimeout(t);
+    } else {
+      // Pause then restart
+      const t = setTimeout(() => {
+        setDisplayed("");
+        setCharIndex(0);
+      }, 2200);
+      return () => clearTimeout(t);
+    }
+  }, [charIndex, fullText]);
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-[var(--background)]">
@@ -110,10 +134,9 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.35 }}
-              className="flex items-center gap-3"
+              className="flex items-center gap-2 h-7"
             >
-              <Sparkles size={14} className="text-[var(--muted-2)] shrink-0" />
-              <div className="h-7 overflow-hidden flex items-center">
+              <div className="overflow-hidden flex items-center">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={roleIndex}
@@ -121,12 +144,17 @@ export default function Hero() {
                     animate={{ y: 0,  opacity: 1 }}
                     exit={{   y: -20, opacity: 0 }}
                     transition={{ duration: 0.25 }}
-                    className="text-sm font-semibold tracking-wide text-[var(--foreground)] uppercase"
+                    className="text-sm font-semibold tracking-widest text-[var(--muted)] uppercase"
                   >
                     {personal.roles[roleIndex]}
                   </motion.span>
                 </AnimatePresence>
               </div>
+              <motion.span
+                animate={{ opacity: [1, 1, 0, 0] }}
+                transition={{ repeat: Infinity, duration: 1.2, times: [0, 0.5, 0.5, 1] }}
+                className="w-0.5 h-4 bg-[var(--muted)] rounded-full"
+              />
             </motion.div>
 
             {/* Tagline */}
@@ -181,31 +209,37 @@ export default function Hero() {
           </div>
 
           {/* ── RIGHT — Bento cluster ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="hidden lg:grid grid-rows-[auto_auto] gap-3"
-          >
-            {/* Code card — full width */}
-            <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden">
+          <div className="hidden lg:grid grid-rows-[auto_auto] gap-3">
+
+            {/* Code card — lines appear one by one */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden"
+            >
               <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-[var(--border)] bg-[var(--card-2)]">
                 <span className="w-2 h-2 rounded-full bg-red-400/60" />
                 <span className="w-2 h-2 rounded-full bg-yellow-400/60" />
                 <span className="w-2 h-2 rounded-full bg-green-400/60" />
                 <span className="ml-auto text-[10px] text-[var(--muted-2)] font-mono">tushar.ts</span>
               </div>
-              <div className="p-4 font-mono text-[11px] leading-6 select-none">
-                {codeLines.map((line) => (
-                  <div key={line.key} className={line.indent ? "pl-4" : ""}>
-                    {line.tokens.map((tok, ti) => (
-                      <span key={ti} className={tok.c}>{tok.t}</span>
-                    ))}
-                  </div>
-                ))}
+              <div className="p-4 font-mono text-[11px] leading-6 select-none min-h-[112px]">
+                <pre className="whitespace-pre text-[var(--muted)]">
+                  {displayed.split("").map((ch, i) => {
+                    // Colorize keywords inline
+                    return <span key={i}>{ch}</span>;
+                  })}
+                  <motion.span
+                    animate={{ opacity: [1, 1, 0, 0] }}
+                    transition={{ repeat: Infinity, duration: 1, times: [0, 0.5, 0.5, 1] }}
+                    className="inline-block w-[2px] h-[12px] bg-[var(--foreground)] align-middle ml-[1px]"
+                  />
+                </pre>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Bottom 3 mini cards */}
+            {/* Bottom 3 mini cards — staggered from bottom */}
             <div className="grid grid-cols-3 gap-3">
               {[
                 { value: "250+", label: "Problems",  sub: "Codeforces" },
@@ -214,9 +248,11 @@ export default function Hero() {
               ].map(({ value, label, sub }, i) => (
                 <motion.div
                   key={label}
-                  initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 + i * 0.08 }}
-                  className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between hover:border-[var(--border-2)] transition-colors"
+                  initial={{ opacity: 0, y: 16, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 1.45 + i * 0.1, ease: [0.0, 0.0, 0.2, 1] }}
+                  whileHover={{ y: -3, transition: { duration: 0.2 } }}
+                  className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between cursor-default hover:border-[var(--border-2)] transition-colors duration-200"
                 >
                   <p className="text-2xl font-black tabular-nums text-[var(--foreground)]">{value}</p>
                   <div>
@@ -227,7 +263,7 @@ export default function Hero() {
               ))}
             </div>
 
-          </motion.div>
+          </div>
 
         </div>
       </div>
