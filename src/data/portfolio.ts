@@ -115,7 +115,7 @@ export const experience = [
     company: "University",
     period: "2020 – 2024",
     description: "Studied core CS fundamentals — data structures, algorithms, OOP, database systems, and software architecture. Built real-world projects across web, desktop (Java Swing), and ML domains.",
-    tech: ["Java", "Python", "C/C++", "React", "MySQL"],
+    tech: ["Java", "Python", "C/C++", "Next.js", "MySQL"],
     highlights: ["Dean's list academic performance", "Multiple project awards"],
   },
   {

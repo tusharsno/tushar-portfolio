@@ -36,7 +36,7 @@ export default function About() {
             className="flex flex-col gap-4"
           >
             {/* Photo */}
-            <div className="relative w-full h-80 bg-[var(--background)] flex items-center justify-center">
+            <div className="relative w-full h-80 flex items-center justify-center">
               <Image
                 src={personal.avatar}
                 alt={personal.name}

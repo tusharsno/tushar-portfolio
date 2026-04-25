@@ -19,7 +19,7 @@ const LinkedinIcon = () => (
 const codeLines = [
   { key: "l1", indent: false, tokens: [{ t: "const ", c: "text-[var(--muted)]" }, { t: "dev", c: "text-[var(--foreground)] font-semibold" }, { t: " = {", c: "text-[var(--muted)]" }] },
   { key: "l2", indent: true,  tokens: [{ t: "name", c: "text-[var(--muted)]" }, { t: ": ", c: "text-[var(--muted)]" }, { t: '"Tushar"', c: "text-[var(--foreground)]" }, { t: ",", c: "text-[var(--muted)]" }] },
-  { key: "l3", indent: true,  tokens: [{ t: "stack", c: "text-[var(--muted)]" }, { t: ": [", c: "text-[var(--muted)]" }, { t: '"Next.js"', c: "text-[var(--foreground)]" }, { t: ", ", c: "text-[var(--muted)]" }, { t: '"Node.js"', c: "text-[var(--foreground)]" }, { t: "],", c: "text-[var(--muted)]" }] },
+  { key: "l3", indent: true,  tokens: [{ t: "stack", c: "text-[var(--muted)]" }, { t: ": [", c: "text-[var(--muted)]" }, { t: '"Next.js"', c: "text-[var(--foreground)]" }, { t: ", ", c: "text-[var(--muted)]" }, { t: '"TypeScript"', c: "text-[var(--foreground)]" }, { t: ", ", c: "text-[var(--muted)]" }, { t: '"Node.js"', c: "text-[var(--foreground)]" }, { t: "],", c: "text-[var(--muted)]" }] },
   { key: "l4", indent: true,  tokens: [{ t: "cp", c: "text-[var(--muted)]" }, { t: ": ", c: "text-[var(--muted)]" }, { t: '"250+ solved"', c: "text-[var(--foreground)]" }, { t: ",", c: "text-[var(--muted)]" }] },
   { key: "l5", indent: true,  tokens: [{ t: "open", c: "text-[var(--muted)]" }, { t: ": ", c: "text-[var(--muted)]" }, { t: "true", c: "text-[var(--foreground)] font-bold" }] },
   { key: "l6", indent: false, tokens: [{ t: "};", c: "text-[var(--muted)]" }] },
@@ -42,13 +42,14 @@ export default function Hero() {
 
   useEffect(() => {
     if (charIndex < fullText.length) {
+      const ch = fullText[charIndex];
+      const delay = ch === "\n" ? 500 : ch === " " ? 180 : 40;
       const t = setTimeout(() => {
         setDisplayed(fullText.slice(0, charIndex + 1));
         setCharIndex(c => c + 1);
-      }, 28);
+      }, delay);
       return () => clearTimeout(t);
     } else {
-      // Pause then restart
       const t = setTimeout(() => {
         setDisplayed("");
         setCharIndex(0);
