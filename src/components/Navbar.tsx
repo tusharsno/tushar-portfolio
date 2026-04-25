@@ -35,25 +35,27 @@ export default function Navbar() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? "bg-[var(--background)]/90 backdrop-blur-md border-b border-[var(--border)] shadow-sm" : "bg-transparent"
+      scrolled
+        ? "bg-[var(--background)]/90 backdrop-blur-md border-b border-[var(--border)] shadow-sm"
+        : "bg-transparent"
     }`}>
       <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="w-8 h-8 rounded-xl bg-[var(--accent)] flex items-center justify-center shrink-0">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--btn-text)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-7 h-7 rounded-lg bg-[var(--accent)] flex items-center justify-center shrink-0">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="var(--btn-text)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="8 6 2 12 8 18" />
               <polyline points="16 6 22 12 16 18" />
-              <line x1="12" y1="4" x2="12" y2="20" strokeWidth="1.8" strokeDasharray="2 2" />
+              <line x1="12" y1="4" x2="12" y2="20" strokeWidth="2" strokeDasharray="2 2" />
             </svg>
           </div>
-          <span className="text-base font-black tracking-tight">
-            {personal.name}<span className="text-[var(--muted)] font-light">.</span>
+          <span className="text-sm font-semibold tracking-tight">
+            {personal.name}
           </span>
         </Link>
 
-        {/* Center — nav links (only on home) */}
+        {/* Center — pill nav */}
         {isHome && (
           <ul className="hidden md:flex items-center gap-0.5 bg-[var(--card)] border border-[var(--border)] rounded-full px-2 py-1.5">
             {sectionLinks.map((link) => (
@@ -76,7 +78,7 @@ export default function Navbar() {
           </ul>
         )}
 
-        {/* Blog page breadcrumb */}
+        {/* Blog breadcrumb */}
         {isBlog && (
           <div className="hidden md:flex items-center gap-2 text-xs text-[var(--muted)]">
             <Link href="/" className="hover:text-[var(--foreground)] transition-colors">Home</Link>
@@ -85,7 +87,7 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Right — Contact + Theme + Blog */}
+        {/* Right — Contact + ThemeToggle + Blog */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
           {isHome && (
             <button
@@ -98,7 +100,7 @@ export default function Navbar() {
           <ThemeToggle />
           <Link
             href="/blog"
-            className={`px-4 py-2 rounded-full border text-xs font-semibold transition-all duration-200 ${
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 border ${
               isBlog
                 ? "bg-[var(--accent)] text-[var(--btn-text)] border-[var(--accent)]"
                 : "border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--accent-subtle)]"
@@ -108,7 +110,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile toggle */}
+        {/* Mobile */}
         <div className="flex md:hidden items-center gap-2">
           <ThemeToggle />
           <button
@@ -121,7 +123,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-[var(--background)] border-b border-[var(--border)] px-6 py-3 space-y-1">
           {isHome && sectionLinks.map((link) => (

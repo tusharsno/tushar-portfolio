@@ -11,14 +11,8 @@ const typeConfig: Record<string, { icon: typeof Briefcase; label: string }> = {
 
 export default function Experience() {
   return (
-    <section id="experience" className="relative py-28 px-6 overflow-hidden">
-
-      {/* Dot grid */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: `radial-gradient(circle, var(--border) 1px, transparent 1px)`,
-        backgroundSize: "28px 28px", opacity: 0.5,
-      }} />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,transparent_40%,var(--background)_100%)] pointer-events-none" />
+    <section id="experience" className="relative py-28 px-6">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--border-2)] to-transparent" />
 
       <div className="relative z-10 max-w-3xl mx-auto">
 

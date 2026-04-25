@@ -17,14 +17,29 @@ export default function BlogPage() {
   return (
     <>
       <Navbar />
-      <main className="relative min-h-screen pt-24 pb-16 px-6 overflow-hidden">
+      <main className="relative min-h-screen pt-24 pb-16 px-6 overflow-hidden bg-[var(--background)]">
 
-        {/* Dot grid */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: `radial-gradient(circle, var(--border) 1px, transparent 1px)`,
-          backgroundSize: "28px 28px", opacity: 0.5,
-        }} />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,transparent_40%,var(--background)_100%)] pointer-events-none" />
+        {/* Wide soft white cone */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-48"
+          style={{
+            width: 1100, height: 700,
+            background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.04) 45%, transparent 68%)",
+            filter: "blur(72px)",
+          }}
+        />
+        {/* Tight bright core */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-16"
+          style={{
+            width: 440, height: 240,
+            background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.12) 0%, transparent 55%)",
+            filter: "blur(32px)",
+          }}
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />
 
         <div className="relative z-10 max-w-6xl mx-auto">
 

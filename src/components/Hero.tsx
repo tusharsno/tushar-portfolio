@@ -34,21 +34,37 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-[var(--background)]">
 
-      {/* Dot grid bg */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: `radial-gradient(circle, var(--border) 1px, transparent 1px)`,
-        backgroundSize: "28px 28px",
-        opacity: 0.7,
-      }} />
-      {/* Radial fade */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,transparent_40%,var(--background)_100%)] pointer-events-none" />
-
-      {/* Soft light blob — right side */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, var(--accent-subtle) 0%, transparent 70%)", opacity: 0.6 }}
+      {/* Wide soft white cone — the main sunlight */}
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        transition={{ duration: 2.4, ease: "easeOut" }}
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-48"
+        style={{
+          width: 1100, height: 700,
+          background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.04) 45%, transparent 68%)",
+          filter: "blur(72px)",
+        }}
       />
+      {/* Tight bright core — the "sun spot" */}
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        transition={{ duration: 1.6, ease: "easeOut", delay: 0.25 }}
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-16"
+        style={{
+          width: 440, height: 240,
+          background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.12) 0%, transparent 55%)",
+          filter: "blur(32px)",
+        }}
+      />
+      {/* Bottom divider line lit by glow */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />
+
+      {/* Bottom fade */}
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--background)] to-transparent pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-24">
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
@@ -62,10 +78,10 @@ export default function Hero() {
               transition={{ duration: 0.4, delay: 0.1 }}
               className="flex items-center gap-3"
             >
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--accent-subtle)] text-xs font-medium text-[var(--muted)]">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--card)] text-xs font-medium text-[var(--muted)]">
                 <MapPin size={10} />{personal.location}
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--accent-subtle)] text-xs font-medium text-[var(--muted)]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--card)] text-xs font-medium text-[var(--muted)]">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Open to work
               </span>
@@ -83,10 +99,10 @@ export default function Hero() {
               <motion.h1
                 initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.55, delay: 0.22 }}
-                className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-none"
+                className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-none text-[var(--foreground)]"
               >
                 {personal.name}
-                <span className="text-[var(--muted)] font-light">.</span>
+                <span className="text-[var(--border-2)] font-light">.</span>
               </motion.h1>
             </div>
 
@@ -96,7 +112,7 @@ export default function Hero() {
               transition={{ duration: 0.4, delay: 0.35 }}
               className="flex items-center gap-3"
             >
-              <Sparkles size={14} className="text-[var(--muted)] shrink-0" />
+              <Sparkles size={14} className="text-[var(--muted-2)] shrink-0" />
               <div className="h-7 overflow-hidden flex items-center">
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -159,7 +175,7 @@ export default function Hero() {
                 </a>
               ))}
               <span className="w-px h-4 bg-[var(--border)]" />
-              <span className="text-xs text-[var(--muted)]">{personal.email}</span>
+              <span className="text-xs text-[var(--muted-2)]">{personal.email}</span>
             </motion.div>
 
           </div>
@@ -172,11 +188,11 @@ export default function Hero() {
           >
             {/* Code card — full width */}
             <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden">
-              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-[var(--border)] bg-[var(--accent-subtle)]">
+              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-[var(--border)] bg-[var(--card-2)]">
                 <span className="w-2 h-2 rounded-full bg-red-400/60" />
                 <span className="w-2 h-2 rounded-full bg-yellow-400/60" />
                 <span className="w-2 h-2 rounded-full bg-green-400/60" />
-                <span className="ml-auto text-[10px] text-[var(--muted)] font-mono">tushar.ts</span>
+                <span className="ml-auto text-[10px] text-[var(--muted-2)] font-mono">tushar.ts</span>
               </div>
               <div className="p-4 font-mono text-[11px] leading-6 select-none">
                 {codeLines.map((line) => (
@@ -200,12 +216,12 @@ export default function Hero() {
                   key={label}
                   initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 + i * 0.08 }}
-                  className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between hover:border-[var(--accent)]/30 transition-colors"
+                  className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between hover:border-[var(--border-2)] transition-colors"
                 >
-                  <p className="text-2xl font-black tabular-nums">{value}</p>
+                  <p className="text-2xl font-black tabular-nums text-[var(--foreground)]">{value}</p>
                   <div>
-                    <p className="text-xs font-semibold">{label}</p>
-                    <p className="text-[10px] text-[var(--muted)]">{sub}</p>
+                    <p className="text-xs font-semibold text-[var(--muted)]">{label}</p>
+                    <p className="text-[10px] text-[var(--muted-2)]">{sub}</p>
                   </div>
                 </motion.div>
               ))}
@@ -221,11 +237,10 @@ export default function Hero() {
         onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
         initial={{ opacity: 0 }} animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors group"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--muted-2)] hover:text-[var(--muted)] transition-colors group"
         aria-label="Scroll down"
       >
-        {/* Mouse SVG */}
-        <svg width="22" height="34" viewBox="0 0 22 34" fill="none" className="text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors">
+        <svg width="22" height="34" viewBox="0 0 22 34" fill="none" className="text-[var(--muted-2)] group-hover:text-[var(--muted)] transition-colors">
           <rect x="1" y="1" width="20" height="32" rx="10" stroke="currentColor" strokeWidth="1.5" />
           <motion.rect
             x="9.5" y="6" width="3" height="6" rx="1.5"
@@ -236,6 +251,7 @@ export default function Hero() {
         </svg>
         <span className="text-[10px] tracking-[0.15em] uppercase">Scroll</span>
       </motion.button>
+
 
     </section>
   );
