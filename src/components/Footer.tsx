@@ -30,11 +30,10 @@ export default function Footer() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <footer className="relative overflow-hidden bg-[var(--card)]">
+    <footer className="relative overflow-hidden" style={{ background: "linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%)" }}>
 
-      {/* Gradient top border with glow */}
+      {/* Top border glow */}
       <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--border-2)] to-transparent" />
-      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent -mt-px" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 pt-16 pb-8">
 
@@ -43,12 +42,11 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="lg:col-span-2 space-y-5">
-            {/* Logo — same as Navbar */}
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="flex items-center gap-2.5"
+              className="flex items-center gap-2.5 group"
             >
-              <div className="w-8 h-8 rounded-xl bg-[var(--accent)] flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-[var(--accent)] flex items-center justify-center shrink-0 group-hover:opacity-90 transition-opacity">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--btn-text)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="8 6 2 12 8 18" />
                   <polyline points="16 6 22 12 16 18" />
@@ -60,16 +58,22 @@ export default function Footer() {
               </span>
             </button>
 
-            <p className="text-sm text-[var(--muted)] leading-relaxed max-w-xs border-l-2 border-[var(--border)] pl-4">
+            <p className="text-sm text-[var(--muted)] leading-relaxed max-w-xs border-l-2 border-[var(--border-2)] pl-4">
               {personal.tagline}
             </p>
+
+            {/* Availability badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--background)] text-xs text-[var(--muted)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              Available for new projects
+            </div>
 
             {/* Socials */}
             <div className="flex items-center gap-2">
               {[
-                { label: "GitHub",   href: personal.github,              icon: GithubIcon   },
-                { label: "LinkedIn", href: personal.linkedin,            icon: LinkedinIcon },
-                { label: "Email",    href: `mailto:${personal.email}`,   icon: Mail         },
+                { label: "GitHub",   href: personal.github,            icon: GithubIcon   },
+                { label: "LinkedIn", href: personal.linkedin,          icon: LinkedinIcon },
+                { label: "Email",    href: `mailto:${personal.email}`, icon: Mail         },
               ].map(({ label, href, icon: Icon }) => (
                 <a
                   key={label}
@@ -77,7 +81,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-8 h-8 flex items-center justify-center rounded-xl border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--accent-subtle)] transition-all duration-200"
+                  className="w-9 h-9 flex items-center justify-center rounded-xl border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--accent-subtle)] hover:border-[var(--border-2)] transition-all duration-200"
                 >
                   <Icon />
                 </a>
@@ -87,7 +91,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div className="space-y-4">
-            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[var(--muted)]">Navigation</p>
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[var(--muted)]">Navigation</p>
             <ul className="space-y-2">
               {navLinks.map(({ label, id }) => (
                 <li key={id}>
@@ -95,7 +99,7 @@ export default function Footer() {
                     onClick={() => scrollTo(id)}
                     className="text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200 flex items-center gap-1.5 group"
                   >
-                    <span className="w-0 group-hover:w-2.5 h-px bg-[var(--accent)] transition-all duration-200 inline-block" />
+                    <span className="w-0 group-hover:w-3 h-px bg-[var(--accent)] transition-all duration-200 inline-block" />
                     {label}
                   </button>
                 </li>
@@ -105,7 +109,7 @@ export default function Footer() {
                   href="/blog"
                   className="text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200 flex items-center gap-1.5 group"
                 >
-                  <span className="w-0 group-hover:w-2.5 h-px bg-[var(--accent)] transition-all duration-200 inline-block" />
+                  <span className="w-0 group-hover:w-3 h-px bg-[var(--accent)] transition-all duration-200 inline-block" />
                   Blog
                 </Link>
               </li>
@@ -114,12 +118,8 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="space-y-4">
-            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[var(--muted)]">Get In Touch</p>
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[var(--muted)]">Get In Touch</p>
             <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                <span className="text-sm text-[var(--muted)]">Available for work</span>
-              </div>
               <a
                 href={`mailto:${personal.email}`}
                 className="block text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors break-all"
@@ -129,7 +129,7 @@ export default function Footer() {
               <a
                 href={personal.resumeUrl}
                 download
-                className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border border-[var(--border)] text-[var(--muted)] hover:bg-[var(--accent)] hover:text-[var(--btn-text)] hover:border-[var(--accent)] transition-all duration-200"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-[var(--border)] text-[var(--muted)] hover:bg-[var(--accent)] hover:text-[var(--btn-text)] hover:border-[var(--accent)] transition-all duration-200"
               >
                 Download CV
               </a>
@@ -138,19 +138,19 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-[var(--border)] mb-6" />
+        <div className="h-px bg-gradient-to-r from-transparent via-[var(--border)] to-transparent mb-6" />
 
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-1.5 text-xs text-[var(--muted)]">
             <span>© {new Date().getFullYear()}</span>
-            <span className="font-semibold text-[var(--foreground)]">{personal.name}</span>
+            <span className="font-bold text-[var(--foreground)]">{personal.name}</span>
             <span>·</span>
             <span className="flex items-center gap-1">
               Built with <Heart size={10} className="text-rose-400 fill-rose-400 mx-0.5" />
             </span>
             {stack.map((tech) => (
-              <span key={tech} className="px-1.5 py-0.5 rounded-md bg-[var(--card)] border border-[var(--border)] font-mono text-[10px]">
+              <span key={tech} className="px-1.5 py-0.5 rounded-md bg-[var(--background)] border border-[var(--border)] font-mono text-[10px]">
                 {tech}
               </span>
             ))}
@@ -162,7 +162,7 @@ export default function Footer() {
             className="group flex items-center gap-2 text-xs text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
           >
             Back to top
-            <span className="w-7 h-7 flex items-center justify-center rounded-xl border border-[var(--border)] group-hover:bg-[var(--accent-subtle)] transition-all duration-200">
+            <span className="w-7 h-7 flex items-center justify-center rounded-xl border border-[var(--border)] group-hover:bg-[var(--accent-subtle)] group-hover:border-[var(--border-2)] transition-all duration-200">
               <ArrowUp size={12} />
             </span>
           </button>

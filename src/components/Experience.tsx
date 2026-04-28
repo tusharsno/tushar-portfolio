@@ -1,13 +1,150 @@
 "use client";
-import { motion } from "framer-motion";
-import { Briefcase, GraduationCap, Code2, ArrowRight } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { Briefcase, GraduationCap, Code2, CheckCircle2 } from "lucide-react";
 import { experience } from "@/data/portfolio";
 
-const typeConfig: Record<string, { icon: typeof Briefcase; label: string }> = {
-  work:      { icon: Briefcase,     label: "Work"        },
-  education: { icon: GraduationCap, label: "Education"   },
-  cp:        { icon: Code2,         label: "Competitive" },
+const typeConfig: Record<string, {
+  icon: typeof Briefcase;
+  label: string;
+  textColor: string;
+  borderColor: string;
+  glowColor: string;
+  badgeBg: string;
+}> = {
+  work: {
+    icon: Briefcase,
+    label: "Work Experience",
+    textColor: "text-[var(--foreground)]",
+    borderColor: "border-l-[var(--foreground)]",
+    glowColor: "rgba(237,237,237,0.06)",
+    badgeBg: "bg-[var(--accent-subtle)] border-[var(--border-2)] text-[var(--muted)]",
+  },
+  education: {
+    icon: GraduationCap,
+    label: "Education",
+    textColor: "text-blue-400",
+    borderColor: "border-l-blue-400",
+    glowColor: "rgba(96,165,250,0.06)",
+    badgeBg: "bg-blue-500/10 border-blue-500/20 text-blue-400",
+  },
+  cp: {
+    icon: Code2,
+    label: "Competitive Programming",
+    textColor: "text-emerald-400",
+    borderColor: "border-l-emerald-400",
+    glowColor: "rgba(52,211,153,0.06)",
+    badgeBg: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
+  },
 };
+
+function TimelineItem({ item, i }: { item: typeof experience[0]; i: number }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const cfg = typeConfig[item.type];
+  const Icon = cfg.icon;
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 28 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.55, delay: i * 0.13, ease: [0.21, 0.47, 0.32, 0.98] }}
+      className="relative grid grid-cols-[44px_1fr] gap-4 sm:gap-6"
+    >
+      {/* Left — icon dot + animated line */}
+      <div className="flex flex-col items-center">
+        <div className={`relative z-10 w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border bg-[var(--card)] border-[var(--border)]`}>
+          <Icon size={15} className={cfg.textColor} />
+        </div>
+        {i < experience.length - 1 && (
+          <motion.div
+            initial={{ scaleY: 0 }}
+            animate={inView ? { scaleY: 1 } : {}}
+            transition={{ duration: 0.7, delay: i * 0.13 + 0.3, ease: "easeOut" }}
+            style={{ originY: 0 }}
+            className="w-px flex-1 mt-2 bg-gradient-to-b from-[var(--border-2)] to-transparent"
+          />
+        )}
+      </div>
+
+      {/* Right — premium card */}
+      <div className="pb-10">
+        <motion.div
+          whileHover={{ x: 4, transition: { duration: 0.2 } }}
+          className={`relative overflow-hidden rounded-3xl border border-[var(--border)] border-l-2 ${cfg.borderColor} transition-all duration-300 hover:shadow-2xl`}
+          style={{
+            background: `linear-gradient(135deg, var(--card) 0%, var(--card-2) 100%)`,
+          }}
+        >
+          {/* Subtle glow behind card based on type */}
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
+            style={{ background: `radial-gradient(ellipse at 0% 50%, ${cfg.glowColor} 0%, transparent 60%)` }}
+          />
+
+          <div className="relative p-5 sm:p-6">
+
+            {/* ── Top row: role + period ── */}
+            <div className="flex flex-wrap items-start justify-between gap-3 mb-1">
+              <div>
+                <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold tracking-[0.18em] uppercase ${cfg.textColor} mb-1.5`}>
+                  <Icon size={9} />
+                  {cfg.label}
+                </span>
+                <h3 className="font-black text-lg leading-tight text-[var(--foreground)]">
+                  {item.role}
+                </h3>
+              </div>
+              <span className={`text-[10px] font-semibold px-3 py-1.5 rounded-full border whitespace-nowrap ${cfg.badgeBg}`}>
+                {item.period}
+              </span>
+            </div>
+
+            {/* Company */}
+            <p className={`text-sm font-semibold mb-4 ${cfg.textColor}`}>
+              @ {item.company}
+            </p>
+
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-[var(--border)] via-[var(--border-2)] to-transparent mb-4" />
+
+            {/* Description */}
+            <p className="text-[var(--muted)] text-sm leading-relaxed mb-5">
+              {item.description}
+            </p>
+
+            {/* Highlights */}
+            <div className="grid sm:grid-cols-2 gap-2 mb-5">
+              {item.highlights.map((h) => (
+                <div
+                  key={h}
+                  className="flex items-start gap-2 text-xs text-[var(--muted)] bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2"
+                >
+                  <CheckCircle2 size={11} className={`${cfg.textColor} shrink-0 mt-0.5`} />
+                  {h}
+                </div>
+              ))}
+            </div>
+
+            {/* Tech tags */}
+            <div className="flex flex-wrap gap-1.5">
+              {item.tech.map((t) => (
+                <span
+                  key={t}
+                  className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[var(--muted)] hover:border-[var(--border-2)] hover:text-[var(--foreground)] transition-colors duration-150 cursor-default"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Experience() {
   return (
@@ -40,79 +177,10 @@ export default function Experience() {
         </motion.h2>
 
         {/* Timeline */}
-        <div className="relative space-y-5">
-
-          {/* Vertical line */}
-          <div className="absolute left-[21px] top-3 bottom-3 w-px bg-gradient-to-b from-[var(--accent)] via-[var(--border)] to-transparent" />
-
-          {experience.map((item, i) => {
-            const cfg = typeConfig[item.type];
-            const Icon = cfg.icon;
-
-            return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="relative flex gap-4"
-              >
-                {/* Icon */}
-                <div className="relative z-10 w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-[var(--card)] border border-[var(--border)]">
-                  <Icon size={15} className="text-[var(--foreground)]" />
-                </div>
-
-                {/* Card */}
-                <motion.div
-                  whileHover={{ x: 4 }}
-                  transition={{ duration: 0.2 }}
-                  className="flex-1 bg-[var(--card)] border border-[var(--border)] rounded-3xl p-5 hover:border-[var(--accent)]/30 hover:shadow-lg transition-all duration-300 mb-1"
-                >
-                  {/* Header */}
-                  <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
-                    <div>
-                      <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[var(--muted)]">
-                        {cfg.label}
-                      </span>
-                      <h3 className="font-bold text-base leading-snug mt-0.5">{item.role}</h3>
-                      <p className="text-sm text-[var(--muted)] mt-0.5">{item.company}</p>
-                    </div>
-                    <span className="text-[10px] text-[var(--muted)] bg-[var(--accent-subtle)] border border-[var(--border)] px-3 py-1 rounded-full whitespace-nowrap">
-                      {item.period}
-                    </span>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-[var(--muted)] text-sm leading-relaxed mb-4 border-l-2 border-[var(--border)] pl-3">
-                    {item.description}
-                  </p>
-
-                  {/* Highlights */}
-                  <div className="flex flex-col gap-1.5 mb-4">
-                    {item.highlights.map((h) => (
-                      <div key={h} className="flex items-center gap-2 text-xs text-[var(--muted)]">
-                        <ArrowRight size={10} className="text-[var(--foreground)] shrink-0" />
-                        {h}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Tech tags */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {item.tech.map((t) => (
-                      <span
-                        key={t}
-                        className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[var(--muted)]"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-              </motion.div>
-            );
-          })}
+        <div>
+          {experience.map((item, i) => (
+            <TimelineItem key={i} item={item} i={i} />
+          ))}
         </div>
 
       </div>

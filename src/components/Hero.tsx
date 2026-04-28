@@ -1,6 +1,7 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { MapPin, Download, ArrowUpRight } from "lucide-react";
 import { personal } from "@/data/portfolio";
 
@@ -59,37 +60,33 @@ export default function Hero() {
   }, [charIndex, fullText]);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-[var(--background)]">
+    <section className="relative min-h-screen flex items-center overflow-hidden dark" style={{ colorScheme: "dark" }}>
 
-      {/* Wide soft white cone — the main sunlight */}
+      {/* Background image */}
       <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        transition={{ duration: 2.4, ease: "easeOut" }}
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-48"
-        style={{
-          width: 1100, height: 700,
-          background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.04) 45%, transparent 68%)",
-          filter: "blur(72px)",
-        }}
-      />
-      {/* Tight bright core — the "sun spot" */}
-      <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        transition={{ duration: 1.6, ease: "easeOut", delay: 0.25 }}
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-16"
-        style={{
-          width: 440, height: 240,
-          background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.12) 0%, transparent 55%)",
-          filter: "blur(32px)",
-        }}
-      />
-      {/* Bottom divider line lit by glow */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.8, ease: "easeOut" }}
+        className="absolute inset-0 z-0"
+      >
+        <Image
+          src="/tushar-image/codingtime-in-library.jpeg"
+          alt="background"
+          fill
+          className="object-cover object-center"
+          priority
+          quality={90}
+        />
+      </motion.div>
 
-      {/* Bottom fade */}
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--background)] to-transparent pointer-events-none" />
+      {/* Dark overlay — layered for depth */}
+      <div className="absolute inset-0 z-[1] bg-black/70" />
+      <div className="absolute inset-0 z-[2] bg-gradient-to-r from-black/80 via-black/50 to-black/20" />
+      <div className="absolute inset-0 z-[3] bg-gradient-to-t from-black/90 via-transparent to-black/30" />
+
+      {/* Bottom fade into next section */}
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent pointer-events-none z-[4]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent z-[4]" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-24">
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
@@ -103,11 +100,11 @@ export default function Hero() {
               transition={{ duration: 0.4, delay: 0.1 }}
               className="flex items-center gap-3"
             >
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--card)] text-xs font-medium text-[var(--muted)]">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-xs font-medium text-white/80">
                 <MapPin size={10} />{personal.location}
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--card)] text-xs font-medium text-[var(--muted)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-xs font-medium text-white/80">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 Open to work
               </span>
             </motion.div>
@@ -117,14 +114,14 @@ export default function Hero() {
               <motion.p
                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.15 }}
-                className="text-[var(--muted)] text-lg font-medium tracking-wide"
+                className="text-[var(--muted)] text-lg font-medium tracking-wide text-white/60"
               >
                 Hey there, I&apos;m
               </motion.p>
               <motion.h1
                 initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.55, delay: 0.22 }}
-                className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-none text-[var(--foreground)]"
+                className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-none text-white"
               >
                 {personal.name}
                 <span className="text-[var(--border-2)] font-light">.</span>
@@ -145,7 +142,7 @@ export default function Hero() {
                     animate={{ y: 0,  opacity: 1 }}
                     exit={{   y: -20, opacity: 0 }}
                     transition={{ duration: 0.25 }}
-                    className="text-sm font-semibold tracking-widest text-[var(--muted)] uppercase"
+                    className="text-sm font-semibold tracking-widest text-white/60 uppercase"
                   >
                     {personal.roles[roleIndex]}
                   </motion.span>
@@ -154,7 +151,7 @@ export default function Hero() {
               <motion.span
                 animate={{ opacity: [1, 1, 0, 0] }}
                 transition={{ repeat: Infinity, duration: 1.2, times: [0, 0.5, 0.5, 1] }}
-                className="w-0.5 h-4 bg-[var(--muted)] rounded-full"
+                className="w-0.5 h-4 bg-white/50 rounded-full"
               />
             </motion.div>
 
@@ -162,7 +159,7 @@ export default function Hero() {
             <motion.p
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.45 }}
-              className="text-[var(--muted)] text-sm leading-relaxed max-w-sm border-l-2 border-[var(--border)] pl-4"
+              className="text-white/60 text-sm leading-relaxed max-w-sm border-l-2 border-white/20 pl-4"
             >
               {personal.tagline}
             </motion.p>
@@ -175,13 +172,13 @@ export default function Hero() {
             >
               <a
                 href={personal.resumeUrl} download
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[var(--btn-text)] text-sm font-semibold hover:opacity-90 hover:scale-[1.03] transition-all duration-200"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-sm font-semibold hover:opacity-90 hover:scale-[1.03] transition-all duration-200"
               >
                 <Download size={13} />Download CV
               </a>
               <button
                 onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--border)] text-[var(--foreground)] text-sm font-semibold hover:bg-[var(--accent-subtle)] transition-all duration-200"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white text-sm font-semibold hover:bg-white/20 transition-all duration-200"
               >
                 View Projects<ArrowUpRight size={13} />
               </button>
@@ -198,13 +195,13 @@ export default function Hero() {
                 { href: personal.linkedin, icon: LinkedinIcon, label: "LinkedIn" },
               ].map(({ href, icon: Icon, label }) => (
                 <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] text-[var(--muted)] text-xs font-medium hover:text-[var(--foreground)] hover:bg-[var(--accent-subtle)] transition-all duration-200"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white/70 text-xs font-medium hover:text-white hover:bg-white/20 transition-all duration-200"
                 >
                   <Icon />{label}
                 </a>
               ))}
-              <span className="w-px h-4 bg-[var(--border)]" />
-              <span className="text-xs text-[var(--muted-2)]">{personal.email}</span>
+              <span className="w-px h-4 bg-white/20" />
+              <span className="text-xs text-white/40">{personal.email}</span>
             </motion.div>
 
           </div>
@@ -217,16 +214,16 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden"
+              className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl overflow-hidden"
             >
-              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-[var(--border)] bg-[var(--card-2)]">
+              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-white/10 bg-white/5">
                 <span className="w-2 h-2 rounded-full bg-red-400/60" />
                 <span className="w-2 h-2 rounded-full bg-yellow-400/60" />
                 <span className="w-2 h-2 rounded-full bg-green-400/60" />
-                <span className="ml-auto text-[10px] text-[var(--muted-2)] font-mono">tushar.ts</span>
+                <span className="ml-auto text-[10px] text-white/40 font-mono">tushar.ts</span>
               </div>
               <div className="p-4 font-mono text-[11px] leading-6 select-none min-h-[112px]">
-                <pre className="whitespace-pre text-[var(--muted)]">
+                <pre className="whitespace-pre text-white/70">
                   {displayed.split("").map((ch, i) => {
                     // Colorize keywords inline
                     return <span key={i}>{ch}</span>;
@@ -234,7 +231,7 @@ export default function Hero() {
                   <motion.span
                     animate={{ opacity: [1, 1, 0, 0] }}
                     transition={{ repeat: Infinity, duration: 1, times: [0, 0.5, 0.5, 1] }}
-                    className="inline-block w-[2px] h-[12px] bg-[var(--foreground)] align-middle ml-[1px]"
+                    className="inline-block w-[2px] h-[12px] bg-white/80 align-middle ml-[1px]"
                   />
                 </pre>
               </div>
@@ -253,12 +250,12 @@ export default function Hero() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.4, delay: 1.45 + i * 0.1, ease: [0.0, 0.0, 0.2, 1] }}
                   whileHover={{ y: -3, transition: { duration: 0.2 } }}
-                  className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between cursor-default hover:border-[var(--border-2)] transition-colors duration-200"
+                  className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 flex flex-col justify-between cursor-default hover:bg-white/15 transition-colors duration-200"
                 >
-                  <p className="text-2xl font-black tabular-nums text-[var(--foreground)]">{value}</p>
+                  <p className="text-2xl font-black tabular-nums text-white">{value}</p>
                   <div>
-                    <p className="text-xs font-semibold text-[var(--muted)]">{label}</p>
-                    <p className="text-[10px] text-[var(--muted-2)]">{sub}</p>
+                    <p className="text-xs font-semibold text-white/60">{label}</p>
+                    <p className="text-[10px] text-white/40">{sub}</p>
                   </div>
                 </motion.div>
               ))}
@@ -274,10 +271,10 @@ export default function Hero() {
         onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
         initial={{ opacity: 0 }} animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--muted-2)] hover:text-[var(--muted)] transition-colors group"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 hover:text-white/70 transition-colors group z-10"
         aria-label="Scroll down"
       >
-        <svg width="22" height="34" viewBox="0 0 22 34" fill="none" className="text-[var(--muted-2)] group-hover:text-[var(--muted)] transition-colors">
+        <svg width="22" height="34" viewBox="0 0 22 34" fill="none" className="text-white/40 group-hover:text-white/70 transition-colors">
           <rect x="1" y="1" width="20" height="32" rx="10" stroke="currentColor" strokeWidth="1.5" />
           <motion.rect
             x="9.5" y="6" width="3" height="6" rx="1.5"

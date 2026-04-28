@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Mail, Send, CheckCircle2 } from "lucide-react";
+import { Mail, Send, CheckCircle2, ArrowUpRight } from "lucide-react";
 import { personal } from "@/data/portfolio";
 
 const GithubIcon = () => (
@@ -43,9 +43,9 @@ export default function Contact() {
   };
 
   const socials = [
-    { label: "Email",    value: personal.email,          href: `mailto:${personal.email}`, icon: Mail         },
-    { label: "GitHub",   value: "github.com/tusharsno",     href: personal.github,            icon: GithubIcon   },
-    { label: "LinkedIn", value: "linkedin.com/in/tushar-barua", href: personal.linkedin,         icon: LinkedinIcon },
+    { label: "Email",    value: personal.email,                  href: `mailto:${personal.email}`, icon: Mail,         desc: "Drop me a line" },
+    { label: "GitHub",   value: "github.com/tusharsno",          href: personal.github,            icon: GithubIcon,   desc: "See my code"    },
+    { label: "LinkedIn", value: "linkedin.com/in/tushar-barua",  href: personal.linkedin,          icon: LinkedinIcon, desc: "Let's connect"  },
   ];
 
   return (
@@ -68,7 +68,7 @@ export default function Contact() {
 
         <div className="grid lg:grid-cols-[1fr_1.4fr] gap-10 items-start">
 
-          {/* ── LEFT — Info ── */}
+          {/* ── LEFT ── */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -76,33 +76,42 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="space-y-8"
           >
-            <div>
+            <div className="space-y-4">
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight leading-tight">
                 Let&apos;s Work<br />Together<span className="text-[var(--muted)] font-light">.</span>
               </h2>
-              <p className="text-[var(--muted)] text-sm leading-relaxed mt-4 border-l-2 border-[var(--border)] pl-4">
-                Have a project in mind or just want to say hi? My inbox is always open.
+              <p className="text-[var(--muted)] text-sm leading-relaxed border-l-2 border-[var(--border-2)] pl-4">
+                Have a project in mind or just want to say hi? My inbox is always open. I typically reply within 24 hours.
               </p>
             </div>
 
-            {/* Social links */}
+            {/* Social cards */}
             <div className="space-y-3">
-              {socials.map(({ label, value, href, icon: Icon }) => (
-                <a
+              {socials.map(({ label, value, href, icon: Icon, desc }, i) => (
+                <motion.a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 rounded-3xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/40 hover:shadow-md transition-all duration-200 group"
+                  initial={{ opacity: 0, x: -16 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  whileHover={{ x: 4, transition: { duration: 0.2 } }}
+                  className="flex items-center gap-4 p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--border-2)] hover:shadow-lg transition-all duration-200 group"
                 >
-                  <div className="w-9 h-9 rounded-2xl bg-[var(--accent-subtle)] border border-[var(--border)] flex items-center justify-center shrink-0 group-hover:bg-[var(--border)] transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center shrink-0 group-hover:border-[var(--border-2)] transition-colors">
                     <Icon />
                   </div>
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-[10px] text-[var(--muted)] uppercase tracking-widest">{label}</p>
-                    <p className="text-sm font-medium mt-0.5">{value}</p>
+                    <p className="text-sm font-semibold mt-0.5 truncate">{value}</p>
                   </div>
-                </a>
+                  <div className="flex flex-col items-end gap-1 shrink-0">
+                    <ArrowUpRight size={13} className="text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors" />
+                    <span className="text-[10px] text-[var(--muted)]">{desc}</span>
+                  </div>
+                </motion.a>
               ))}
             </div>
           </motion.div>
@@ -113,25 +122,34 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="bg-[var(--card)] border border-[var(--border)] rounded-3xl overflow-hidden"
+            className="rounded-3xl border border-[var(--border)] overflow-hidden"
+            style={{ background: "linear-gradient(135deg, var(--card) 0%, var(--card-2) 100%)" }}
           >
             {status === "sent" ? (
-              <div className="flex flex-col items-center justify-center gap-4 text-center p-12">
-                <CheckCircle2 size={44} className="text-[var(--foreground)]" />
-                <h3 className="font-black text-xl">Message Sent!</h3>
-                <p className="text-[var(--muted)] text-sm">Thanks for reaching out. I&apos;ll get back to you soon.</p>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex flex-col items-center justify-center gap-4 text-center p-12"
+              >
+                <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                  <CheckCircle2 size={28} className="text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="font-black text-xl">Message Sent!</h3>
+                  <p className="text-[var(--muted)] text-sm mt-1">Thanks for reaching out. I&apos;ll get back to you soon.</p>
+                </div>
                 <button
                   onClick={() => setStatus("idle")}
                   className="text-sm text-[var(--muted)] underline underline-offset-4 hover:text-[var(--foreground)] transition-colors"
                 >
                   Send another
                 </button>
-              </div>
+              </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-5">
                 {/* Form header */}
                 <div className="pb-4 border-b border-[var(--border)]">
-                  <h3 className="font-bold text-base">Send a message</h3>
+                  <h3 className="font-black text-base">Send a message</h3>
                   <p className="text-xs text-[var(--muted)] mt-0.5">I&apos;ll reply within 24 hours.</p>
                 </div>
 
@@ -139,35 +157,35 @@ export default function Contact() {
                   { name: "name",  label: "Name",  type: "text",  placeholder: "Your name"      },
                   { name: "email", label: "Email", type: "email", placeholder: "your@email.com" },
                 ].map(({ name, label, type, placeholder }) => (
-                  <div key={name}>
-                    <label className="block text-xs font-semibold tracking-wide uppercase text-[var(--muted)] mb-2">{label}</label>
+                  <div key={name} className="space-y-1.5">
+                    <label className="block text-xs font-bold tracking-wide uppercase text-[var(--muted)]">{label}</label>
                     <input
                       type={type}
                       required
                       placeholder={placeholder}
                       value={form[name as keyof typeof form]}
                       onChange={(e) => setForm({ ...form, [name]: e.target.value })}
-                      className="w-full px-4 py-3 rounded-2xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] placeholder:text-[var(--muted)] text-sm focus:outline-none focus:border-[var(--accent)] transition-all"
+                      className="w-full px-4 py-3 rounded-2xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] placeholder:text-[var(--muted-2)] text-sm focus:outline-none focus:border-[var(--border-2)] focus:ring-1 focus:ring-[var(--border-2)] transition-all"
                     />
                   </div>
                 ))}
 
-                <div>
-                  <label className="block text-xs font-semibold tracking-wide uppercase text-[var(--muted)] mb-2">Message</label>
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold tracking-wide uppercase text-[var(--muted)]">Message</label>
                   <textarea
                     required
                     rows={4}
                     placeholder="Tell me about your project..."
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="w-full px-4 py-3 rounded-2xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] placeholder:text-[var(--muted)] text-sm focus:outline-none focus:border-[var(--accent)] transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-2xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] placeholder:text-[var(--muted-2)] text-sm focus:outline-none focus:border-[var(--border-2)] focus:ring-1 focus:ring-[var(--border-2)] transition-all resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-[var(--accent)] text-[var(--btn-text)] text-sm font-semibold hover:opacity-90 disabled:opacity-60 transition-all duration-200"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-[var(--accent)] text-[var(--btn-text)] text-sm font-bold hover:opacity-90 disabled:opacity-60 transition-all duration-200 hover:scale-[1.01]"
                 >
                   {status === "sending" ? (
                     <span className="w-4 h-4 border-2 border-[var(--btn-text)]/30 border-t-[var(--btn-text)] rounded-full animate-spin" />

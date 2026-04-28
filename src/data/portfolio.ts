@@ -8,7 +8,7 @@ export const personal = {
   linkedin: "https://www.linkedin.com/in/tushar-barua-0b657b272",
   resumeUrl: "/resume.pdf",
   location: "Bangladesh",
-  avatar: "/tushar.jpeg",
+  avatar: "/tushar-image/coding-in-office.jpeg",
 };
 
 export const about = {
@@ -75,6 +75,7 @@ export const projects = [
     live: "https://dsaplatform.vercel.app",
     category: "Full Stack",
     emoji: "🧠",
+    image: "/projects_ss/dsa-platform-ss.png",
     featured: true,
   },
   {
@@ -85,6 +86,7 @@ export const projects = [
     live: "https://mediscript-e.vercel.app",
     category: "Full Stack",
     emoji: "🏥",
+    image: "/projects_ss/mediscript-ss.png",
     featured: true,
   },
   {
@@ -95,6 +97,7 @@ export const projects = [
     live: "https://heart-scan-three.vercel.app",
     category: "Machine Learning",
     emoji: "❤️",
+    image: "/projects_ss/heart-scan-three-ss.png",
     featured: true,
   },
 ];
