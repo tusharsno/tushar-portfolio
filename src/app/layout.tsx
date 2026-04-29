@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Tushar | Full Stack Developer",
   description: "Personal portfolio of Tushar Barua — Full Stack Developer specializing in Next.js, TypeScript, and Node.js. Building fast, production-ready web apps.",
   keywords: ["Full Stack Developer", "React", "Next.js", "TypeScript", "Node.js", "Portfolio", "Tushar Barua", "Bangladesh"],
-  metadataBase: new URL("https://tushar-portfolio.vercel.app"),
+  metadataBase: new URL("https://tushar-portfolio-swart.vercel.app"),
   openGraph: {
     title: "Tushar Barua | Full Stack Developer",
     description: "Building fast, production-ready web apps with Next.js, TypeScript & Node.js.",
