@@ -8,12 +8,20 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: "Tushar | Full Stack Developer",
-  description: "Personal portfolio of Tushar — Full Stack Developer specializing in React, Next.js, and Node.js.",
-  keywords: ["Full Stack Developer", "React", "Next.js", "Portfolio", "Tushar"],
+  description: "Personal portfolio of Tushar Barua — Full Stack Developer specializing in Next.js, TypeScript, and Node.js. Building fast, production-ready web apps.",
+  keywords: ["Full Stack Developer", "React", "Next.js", "TypeScript", "Node.js", "Portfolio", "Tushar Barua", "Bangladesh"],
+  metadataBase: new URL("https://tushar-portfolio.vercel.app"),
   openGraph: {
-    title: "Tushar | Full Stack Developer",
-    description: "Building modern, scalable web applications with clean code and great UX.",
+    title: "Tushar Barua | Full Stack Developer",
+    description: "Building fast, production-ready web apps with Next.js, TypeScript & Node.js.",
     type: "website",
+    url: "https://tushar-portfolio.vercel.app",
+    siteName: "Tushar Barua Portfolio",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tushar Barua | Full Stack Developer",
+    description: "Building fast, production-ready web apps with Next.js, TypeScript & Node.js.",
   },
 };
 
