@@ -1,11 +1,20 @@
 "use client";
+import React from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Briefcase, GraduationCap, Code2, CheckCircle2 } from "lucide-react";
+
+function YoutubeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/>
+    </svg>
+  );
+}
 import { experience } from "@/data/portfolio";
 
 const typeConfig: Record<string, {
-  icon: typeof Briefcase;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
   label: string;
   textColor: string;
   borderColor: string;
@@ -27,6 +36,14 @@ const typeConfig: Record<string, {
     borderColor: "border-l-blue-400",
     glowColor: "rgba(96,165,250,0.06)",
     badgeBg: "bg-blue-500/10 border-blue-500/20 text-blue-400",
+  },
+  youtube: {
+    icon: YoutubeIcon,
+    label: "Content Creator",
+    textColor: "text-red-400",
+    borderColor: "border-l-red-400",
+    glowColor: "rgba(248,113,113,0.06)",
+    badgeBg: "bg-red-500/10 border-red-500/20 text-red-400",
   },
   cp: {
     icon: Code2,
@@ -54,7 +71,7 @@ function TimelineItem({ item, i }: { item: typeof experience[0]; i: number }) {
     >
       {/* Left — icon dot + animated line */}
       <div className="flex flex-col items-center">
-        <div className={`relative z-10 w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border bg-[var(--card)] border-[var(--border)]`}>
+        <div className={`relative z-10 w-11 h-11 rounded-lg flex items-center justify-center shrink-0 border bg-[var(--card)] border-[var(--border)]`}>
           <Icon size={15} className={cfg.textColor} />
         </div>
         {i < experience.length - 1 && (
@@ -72,14 +89,14 @@ function TimelineItem({ item, i }: { item: typeof experience[0]; i: number }) {
       <div className="pb-10">
         <motion.div
           whileHover={{ x: 4, transition: { duration: 0.2 } }}
-          className={`relative overflow-hidden rounded-3xl border border-[var(--border)] border-l-2 ${cfg.borderColor} transition-all duration-300 hover:shadow-2xl`}
+          className={`relative overflow-hidden rounded-xl border border-[var(--border)] border-l-2 ${cfg.borderColor} transition-all duration-300 hover:shadow-2xl`}
           style={{
             background: `linear-gradient(135deg, var(--card) 0%, var(--card-2) 100%)`,
           }}
         >
           {/* Subtle glow behind card based on type */}
           <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl"
             style={{ background: `radial-gradient(ellipse at 0% 50%, ${cfg.glowColor} 0%, transparent 60%)` }}
           />
 
@@ -119,7 +136,7 @@ function TimelineItem({ item, i }: { item: typeof experience[0]; i: number }) {
               {item.highlights.map((h) => (
                 <div
                   key={h}
-                  className="flex items-start gap-2 text-xs text-[var(--muted)] bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2"
+                  className="flex items-start gap-2 text-xs text-[var(--muted)] bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2"
                 >
                   <CheckCircle2 size={11} className={`${cfg.textColor} shrink-0 mt-0.5`} />
                   {h}
@@ -132,12 +149,22 @@ function TimelineItem({ item, i }: { item: typeof experience[0]; i: number }) {
               {item.tech.map((t) => (
                 <span
                   key={t}
-                  className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[var(--muted)] hover:border-[var(--border-2)] hover:text-[var(--foreground)] transition-colors duration-150 cursor-default"
+                  className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-[var(--background)] border border-[var(--border)] text-[var(--muted)] hover:border-[var(--border-2)] hover:text-[var(--foreground)] transition-colors duration-150 cursor-default"
                 >
                   {t}
                 </span>
               ))}
             </div>
+            {'link' in item && item.link && (
+              <a
+                href={item.link as string}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold hover:bg-red-500/20 transition-colors duration-200"
+              >
+                <YoutubeIcon /> Visit Channel
+              </a>
+            )}
 
           </div>
         </motion.div>

@@ -52,17 +52,16 @@ function SkillIcon({ name }: { name: string }) {
   const icon = iconMap[name];
   if (!icon) return null;
   return (
-    <svg
-      viewBox="0 0 24 24"
-      width="15"
-      height="15"
-      fill={`#${icon.hex}`}
-      className="shrink-0"
-      aria-label={icon.title}
-    >
+    <svg viewBox="0 0 24 24" width="13" height="13" fill={`#${icon.hex}`} className="shrink-0" aria-label={icon.title}>
       <path d={icon.path} />
     </svg>
   );
+}
+
+function levelLabel(level: number) {
+  if (level >= 85) return { label: "Expert",       color: "text-emerald-500" };
+  if (level >= 70) return { label: "Intermediate", color: "text-blue-400" };
+  return              { label: "Beginner",     color: "text-[var(--muted)]" };
 }
 
 export default function Skills() {
@@ -102,7 +101,7 @@ export default function Skills() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="border border-[var(--border)] rounded-3xl overflow-hidden"
+          className="border border-[var(--border)] rounded-xl overflow-hidden"
           style={{ background: "linear-gradient(135deg, var(--card) 0%, var(--card-2) 100%)" }}
         >
           <div className="flex flex-col sm:flex-row">
@@ -113,7 +112,7 @@ export default function Skills() {
                 <button
                   key={group.category}
                   onClick={() => setActive(i)}
-                  className={`relative flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-200 w-full text-left ${
+                  className={`relative flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 w-full text-left ${
                     active === i
                       ? "text-[var(--foreground)]"
                       : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--accent-subtle)]"
@@ -122,7 +121,7 @@ export default function Skills() {
                   {active === i && (
                     <motion.div
                       layoutId="tab-bg"
-                      className="absolute inset-0 rounded-xl bg-[var(--accent-subtle)] border border-[var(--border-2)]"
+                      className="absolute inset-0 rounded-lg bg-[var(--accent-subtle)] border border-[var(--border-2)]"
                       transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                     />
                   )}
@@ -161,22 +160,24 @@ export default function Skills() {
                     </span>
                   </div>
 
-                  {/* Pills with icons */}
+                  {/* Pills with level badges */}
                   <div className="flex flex-wrap gap-2">
-                    {current.items.map((skill, i) => (
-                      <motion.span
-                        key={skill}
-                        initial={{ opacity: 0, scale: 0.85 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.15, delay: i * 0.04 }}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--accent)] hover:text-[var(--btn-text)] hover:border-[var(--accent)] hover:shadow-md transition-all duration-200 cursor-default group"
-                      >
-                        <span className="group-hover:brightness-0 group-hover:invert transition-all duration-200">
-                          <SkillIcon name={skill} />
-                        </span>
-                        {skill}
-                      </motion.span>
-                    ))}
+                    {current.items.map((skill, i) => {
+                      const { label, color } = levelLabel(skill.level);
+                      return (
+                        <motion.div
+                          key={skill.name}
+                          initial={{ opacity: 0, scale: 0.85 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.15, delay: i * 0.04 }}
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--accent-subtle)] transition-all duration-200 cursor-default group"
+                        >
+                          <SkillIcon name={skill.name} />
+                          {skill.name}
+                          <span className={`text-[10px] font-bold ${color} opacity-70`}>{label}</span>
+                        </motion.div>
+                      );
+                    })}
                   </div>
                 </motion.div>
               </AnimatePresence>

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { personal } from "@/data/portfolio";
 
-const sectionLinks = ["About", "Skills", "Projects", "Experience"];
+const sectionLinks = ["About", "Skills", "Projects", "Experience", "Contact"];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -27,7 +27,31 @@ export default function Navbar() {
         setPastHero(scrollY > window.innerHeight * 0.8);
         if (!isHome) return;
         const sections = sectionLinks.map((l) => document.getElementById(l.toLowerCase()));
-        const current = sections.filter((s) => s && s.getBoundingClientRect().top <= 100).pop();
+        
+        let current = null;
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const section = sections[i];
+          if (!section) continue;
+          
+          const rect = section.getBoundingClientRect();
+          const sectionId = section.id;
+          
+          // Special handling for Contact (last section)
+          if (sectionId === 'contact') {
+            // If we're near the bottom of the page OR contact is 30% visible
+            if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 200 || 
+                rect.top <= window.innerHeight * 0.7) {
+              current = section;
+              break;
+            }
+          } else {
+            // Normal sections: trigger when top is within 100px of viewport top
+            if (rect.top <= 100) {
+              current = section;
+              break;
+            }
+          }
+        }
         setActive(current?.id ?? "");
       });
     };
@@ -111,16 +135,6 @@ export default function Navbar() {
 
         {/* Right */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
-          {isHome && (
-            <button
-              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              className={`text-xs font-medium transition-colors duration-200 ${
-                onHero ? "text-white/70 hover:text-white" : "text-[var(--muted)] hover:text-[var(--foreground)]"
-              }`}
-            >
-              Contact
-            </button>
-          )}
           <ThemeToggle />
           <Link
             href="/blog"
@@ -160,14 +174,6 @@ export default function Navbar() {
               {link}
             </button>
           ))}
-          {isHome && (
-            <button
-              onClick={() => { scrollTo("contact"); setOpen(false); }}
-              className="block w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--accent-subtle)] transition-colors"
-            >
-              Contact
-            </button>
-          )}
           <div className="pt-2 border-t border-[var(--border)]">
             <Link
               href="/blog"

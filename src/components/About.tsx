@@ -1,13 +1,14 @@
 "use client";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { CheckCircle2, Download, ArrowUpRight } from "lucide-react";
 import { about, personal } from "@/data/portfolio";
 
 export default function About() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [imageError, setImageError] = useState(false);
 
   return (
     <section id="about" className="relative py-28 px-6 overflow-hidden">
@@ -37,22 +38,34 @@ export default function About() {
             className="flex flex-col gap-4"
           >
             {/* Photo card */}
-            <div className="relative rounded-3xl overflow-hidden border border-[var(--border)] bg-[var(--card)] p-1">
-              <div className="relative w-full rounded-2xl overflow-hidden" style={{ aspectRatio: "3/4" }}>
-                <Image
-                  src={personal.avatar}
-                  alt={personal.name}
-                  fill
-                  className="object-cover object-center"
-                  priority
-                />
-                {/* Bottom gradient */}
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--card)] to-transparent" />
-                {/* Name overlay */}
-                <div className="absolute bottom-0 inset-x-0 p-4">
-                  <p className="font-black text-base text-[var(--foreground)]">{personal.name}</p>
-                  <p className="text-xs text-[var(--muted)]">{personal.title}</p>
-                </div>
+            <div className="relative rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--card)] p-1">
+              <div className="relative w-full rounded-lg overflow-hidden" style={{ aspectRatio: "3/4" }}>
+                {imageError ? (
+                  <div className="w-full h-full bg-[var(--card-2)] flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-6xl mb-2">👤</div>
+                      <p className="text-xs text-[var(--muted)]">Image not available</p>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <Image
+                      src={personal.avatar}
+                      alt={personal.name}
+                      fill
+                      className="object-cover object-center"
+                      priority
+                      onError={() => setImageError(true)}
+                    />
+                    {/* Bottom gradient */}
+                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--card)] to-transparent" />
+                    {/* Name overlay */}
+                    <div className="absolute bottom-0 inset-x-0 p-4">
+                      <p className="font-black text-base text-[var(--foreground)]">{personal.name}</p>
+                      <p className="text-xs text-[var(--muted)]">{personal.title}</p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -65,9 +78,9 @@ export default function About() {
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.4, delay: 0.2 + i * 0.08 }}
                   whileHover={{ y: -3, transition: { duration: 0.2 } }}
-                  className="relative overflow-hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 hover:border-[var(--border-2)] hover:shadow-lg transition-all duration-200"
+                  className="relative overflow-hidden bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 hover:border-[var(--border-2)] hover:shadow-lg transition-all duration-200"
                 >
-                  <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[var(--border)] to-transparent rounded-bl-3xl opacity-40" />
+                  <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[var(--border)] to-transparent rounded-bl-xl opacity-40" />
                   <p className="text-2xl font-black tabular-nums leading-none text-[var(--foreground)]">{stat.value}</p>
                   <p className="text-xs font-semibold mt-2 text-[var(--foreground)]">{stat.label}</p>
                   <p className="text-[10px] text-[var(--muted)] mt-0.5">{stat.platform}</p>
@@ -94,7 +107,7 @@ export default function About() {
             </div>
 
             {/* CP callout */}
-            <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+            <div className="bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 space-y-3">
               <p className="text-[10px] font-bold tracking-[0.18em] uppercase text-[var(--muted)]">
                 Competitive Programming
               </p>
@@ -122,7 +135,7 @@ export default function About() {
                   initial={{ opacity: 0, x: 16 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: 0.3 + i * 0.08 }}
-                  className="flex items-start gap-3 text-sm text-[var(--muted)] bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-2.5 hover:border-[var(--border-2)] transition-colors duration-200"
+                  className="flex items-start gap-3 text-sm text-[var(--muted)] bg-[var(--card)] border border-[var(--border)] rounded-lg px-4 py-2.5 hover:border-[var(--border-2)] transition-colors duration-200"
                 >
                   <CheckCircle2 size={13} className="text-[var(--foreground)] mt-0.5 shrink-0" />
                   {item}
