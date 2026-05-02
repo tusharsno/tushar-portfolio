@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "Tushar Barua | Full Stack Developer",
     description: "Building fast, production-ready web apps with Next.js, TypeScript & Node.js.",
     type: "website",
-    url: "https://tushar-portfolio.vercel.app",
+    url: "https://tushar-portfolio-swart.vercel.app",
     siteName: "Tushar Barua Portfolio",
   },
   twitter: {

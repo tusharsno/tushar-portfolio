@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { CheckCircle2, Download, ArrowUpRight } from "lucide-react";
 import { about, personal } from "@/data/portfolio";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 export default function About() {
   const ref = useRef(null);
@@ -81,7 +82,7 @@ export default function About() {
                   className="relative overflow-hidden bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 hover:border-[var(--border-2)] hover:shadow-lg transition-all duration-200"
                 >
                   <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[var(--border)] to-transparent rounded-bl-xl opacity-40" />
-                  <p className="text-2xl font-black tabular-nums leading-none text-[var(--foreground)]">{stat.value}</p>
+                  <p className="text-2xl font-black tabular-nums leading-none text-[var(--foreground)]"><AnimatedCounter value={stat.value} /></p>
                   <p className="text-xs font-semibold mt-2 text-[var(--foreground)]">{stat.label}</p>
                   <p className="text-[10px] text-[var(--muted)] mt-0.5">{stat.platform}</p>
                 </motion.div>

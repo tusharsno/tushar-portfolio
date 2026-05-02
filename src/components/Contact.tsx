@@ -1,13 +1,16 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Mail, Send, CheckCircle2, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons";
 import { personal } from "@/data/portfolio";
+import Toast, { ToastType } from "@/components/Toast";
 
 export default function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
+  const closeToast = useCallback(() => setToast(null), []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,13 +24,14 @@ export default function Contact() {
       if (res.ok) {
         setStatus("sent");
         setForm({ name: "", email: "", message: "" });
+        setToast({ message: "Message sent! I'll get back to you soon.", type: "success" });
       } else {
         setStatus("idle");
-        alert("Failed to send. Please try again.");
+        setToast({ message: "Failed to send. Please try again.", type: "error" });
       }
     } catch {
       setStatus("idle");
-      alert("Failed to send. Please try again.");
+      setToast({ message: "Failed to send. Please try again.", type: "error" });
     }
   };
 
@@ -38,6 +42,8 @@ export default function Contact() {
   ];
 
   return (
+    <>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} />}
     <section id="contact" className="relative py-28 px-6">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--border-2)] to-transparent" />
 
@@ -190,5 +196,6 @@ export default function Contact() {
         </div>
       </div>
     </section>
+    </>  
   );
 }

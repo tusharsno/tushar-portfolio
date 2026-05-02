@@ -5,6 +5,7 @@ import Image from "next/image";
 import { MapPin, Download, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons";
 import { personal } from "@/data/portfolio";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 const codeLines = [
   { key: "l1", indent: false, tokens: [
@@ -111,6 +112,7 @@ export default function Hero() {
           src="/tushar-image/codingtime-in-library.jpeg"
           alt="background"
           fill
+          sizes="100vw"
           className="object-cover object-center"
           priority
           quality={90}
@@ -287,7 +289,7 @@ export default function Hero() {
                   whileHover={{ y: -3, transition: { duration: 0.2 } }}
                   className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 flex flex-col justify-between cursor-default hover:bg-white/15 transition-colors duration-200"
                 >
-                  <p className="text-2xl font-black tabular-nums text-white">{value}</p>
+                  <p className="text-2xl font-black tabular-nums text-white"><AnimatedCounter value={value} /></p>
                   <div>
                     <p className="text-xs font-semibold text-white/60">{label}</p>
                     <p className="text-[10px] text-white/40">{sub}</p>

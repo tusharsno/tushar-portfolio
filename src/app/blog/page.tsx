@@ -2,17 +2,23 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, Clock, Tag } from "lucide-react";
+import { ArrowUpRight, Clock, Tag, Search } from "lucide-react";
 import { blogPosts, categories } from "@/data/blog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export default function BlogPage() {
   const [active, setActive] = useState("All");
+  const [query, setQuery] = useState("");
 
-  const filtered = active === "All"
-    ? blogPosts
-    : blogPosts.filter((p) => p.category === active);
+  const filtered = blogPosts.filter((p) => {
+    const matchCat = active === "All" || p.category === active;
+    const matchQuery = query === "" ||
+      p.title.toLowerCase().includes(query.toLowerCase()) ||
+      p.excerpt.toLowerCase().includes(query.toLowerCase()) ||
+      p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()));
+    return matchCat && matchQuery;
+  });
 
   return (
     <>
@@ -35,37 +41,72 @@ export default function BlogPage() {
           </motion.div>
 
           {/* Heading + filter */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
-            <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.05 }}
-              className="text-4xl sm:text-5xl font-black tracking-tight leading-tight"
-            >
-              Thoughts & Writes<span className="text-[var(--muted)] font-light">.</span>
-            </motion.h1>
+          <div className="flex flex-col gap-6 mb-10">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+              <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.05 }}
+                className="text-4xl sm:text-5xl font-black tracking-tight leading-tight"
+              >
+                Thoughts & Writes<span className="text-[var(--muted)] font-light">.</span>
+              </motion.h1>
 
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}
-              className="flex items-center gap-1.5 bg-[var(--card)] border border-[var(--border)] rounded-full p-1"
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}
+                className="flex items-center gap-1.5 bg-[var(--card)] border border-[var(--border)] rounded-full p-1"
+              >
+                {categories.map((cat) => (
+                  <button key={cat} onClick={() => setActive(cat)}
+                    className={`relative px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                      active === cat ? "text-[var(--btn-text)]" : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                    }`}
+                  >
+                    {active === cat && (
+                      <motion.span layoutId="blog-pill" className="absolute inset-0 rounded-full bg-[var(--accent)]"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                      />
+                    )}
+                    <span className="relative z-10">{cat}</span>
+                  </button>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Search bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="relative max-w-md"
             >
-              {categories.map((cat) => (
-                <button key={cat} onClick={() => setActive(cat)}
-                  className={`relative px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
-                    active === cat ? "text-[var(--btn-text)]" : "text-[var(--muted)] hover:text-[var(--foreground)]"
-                  }`}
+              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] pointer-events-none" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search posts..."
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] text-sm text-[var(--foreground)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--border-2)] transition-colors"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--foreground)] text-xs transition-colors"
                 >
-                  {active === cat && (
-                    <motion.span layoutId="blog-pill" className="absolute inset-0 rounded-full bg-[var(--accent)]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                    />
-                  )}
-                  <span className="relative z-10">{cat}</span>
+                  ✕
                 </button>
-              ))}
+              )}
             </motion.div>
           </div>
 
           {/* Cards */}
           <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             <AnimatePresence mode="popLayout">
-              {filtered.map((post, i) => (
+              {filtered.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                  className="col-span-full flex flex-col items-center justify-center py-20 text-center gap-3"
+                >
+                  <p className="text-4xl">🔍</p>
+                  <p className="text-sm font-semibold text-[var(--foreground)]">No posts found</p>
+                  <p className="text-xs text-[var(--muted)]">Try a different search term or category</p>
+                </motion.div>
+              ) : filtered.map((post, i) => (
                 <motion.div key={post.slug} layout
                   initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3, delay: i * 0.06 }}

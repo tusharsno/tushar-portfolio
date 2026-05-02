@@ -1,5 +1,6 @@
 import Groq from "groq-sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit } from "@/lib/rateLimit";
 
 const SYSTEM_PROMPT = `You are Tushar Barua's portfolio assistant. You ONLY answer questions strictly related to Tushar Barua — his skills, projects, experience, education, and contact info. 
 
@@ -36,12 +37,18 @@ Experience:
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+  if (!rateLimit(`chat:${ip}`, 10, 60_000)) {
+    return NextResponse.json({ error: "Too many requests. Please wait a moment." }, { status: 429 });
+  }
+
   try {
     const { messages } = await req.json();
+    const trimmed = messages.slice(-10);
 
     const chatMessages = [
       { role: "system", content: SYSTEM_PROMPT },
-      ...messages.map((m: { role: string; content: string }) => ({
+      ...trimmed.map((m: { role: string; content: string }) => ({
         role: m.role === "assistant" ? "assistant" : "user",
         content: m.content,
       })),

@@ -838,6 +838,1005 @@ pnpm prisma db seed
 Prisma + PostgreSQL is the most productive backend stack for TypeScript developers. The auto-generated types eliminate an entire class of bugs, the migration system keeps your schema in sync, and the query API is intuitive enough to read like plain English. Start with a simple schema, add relations as needed, and use transactions for critical operations.
     `.trim(),
   },
+  {
+    slug: "typescript-best-practices",
+    title: "TypeScript — Complete A to Z Guide",
+    excerpt: "The most complete TypeScript guide. Every concept explained in depth — from basic types to advanced generics, decorators, utility types, and real-world patterns.",
+    category: "Web Dev",
+    date: "2025-02-15",
+    readTime: "30 min read",
+    tags: ["TypeScript", "JavaScript", "Types", "Advanced"],
+    content: `
+## Why TypeScript?
+
+TypeScript adds static typing to JavaScript, catching errors at compile time instead of runtime.
+
+## Essential Type Annotations
+
+\`\`\`typescript
+interface User {
+  name: string;
+  age: number;
+  email?: string;
+}
+
+function processUser(user: User): string {
+  return user.name.toUpperCase();
+}
+\`\`\`
+
+## Utility Types
+
+\`\`\`typescript
+type PublicUser = Pick<User, "id" | "name" | "email">;
+type SafeUser = Omit<User, "password">;
+type PartialUser = Partial<User>;
+\`\`\`
+
+## Generic Functions
+
+\`\`\`typescript
+function getFirst<T>(arr: T[]): T | undefined {
+  return arr[0];
+}
+\`\`\`
+
+## Discriminated Unions
+
+\`\`\`typescript
+type ApiState = 
+  | { status: "loading" }
+  | { status: "success"; data: string }
+  | { status: "error"; error: string };
+\`\`\`
+
+## React with TypeScript
+
+\`\`\`tsx
+interface ButtonProps {
+  children: ReactNode;
+  onClick: () => void;
+  variant?: "primary" | "secondary";
+}
+
+function Button({ children, onClick, variant = "primary" }: ButtonProps) {
+  return <button onClick={onClick}>{children}</button>;
+}
+\`\`\`
+
+## Conclusion
+
+TypeScript is most effective when you embrace its type system fully. Use strict mode, explicit types, and handle null cases properly.
+    `.trim(),
+  },
+  {
+    slug: "docker-for-developers",
+    title: "Docker for Developers — Complete Beginner Guide",
+    excerpt: "Learn Docker from scratch. Containerize your applications, write Dockerfiles, use docker-compose, and deploy to production. Everything you need to get started.",
+    category: "Backend",
+    date: "2025-02-20",
+    readTime: "14 min read",
+    tags: ["Docker", "DevOps", "Containers", "Deployment"],
+    content: `
+## What is Docker?
+
+Docker is a containerization platform that packages your application and its dependencies into lightweight, portable containers.
+
+## Why Use Docker?
+
+- **Consistency** — runs the same everywhere
+- **Isolation** — no dependency conflicts
+- **Portability** — works on any machine
+- **Scalability** — easy to scale up/down
+
+## Installing Docker
+
+\`\`\`bash
+# macOS/Windows: Download Docker Desktop
+# Ubuntu:
+sudo apt update
+sudo apt install docker.io
+sudo systemctl start docker
+\`\`\`
+
+## Basic Commands
+
+\`\`\`bash
+# Pull an image
+docker pull node:18
+
+# Run a container
+docker run -it node:18 bash
+
+# List running containers
+docker ps
+
+# Stop a container
+docker stop <container-id>
+\`\`\`
+
+## Writing a Dockerfile
+
+\`\`\`dockerfile
+# Use official Node.js image
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start the app
+CMD ["npm", "start"]
+\`\`\`
+
+## Building and Running
+
+\`\`\`bash
+# Build image
+docker build -t my-app .
+
+# Run container
+docker run -p 3000:3000 my-app
+\`\`\`
+
+## Docker Compose
+
+\`\`\`yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+\`\`\`
+
+\`\`\`bash
+# Start all services
+docker-compose up -d
+
+# Stop all services
+docker-compose down
+\`\`\`
+
+## Best Practices
+
+- Use multi-stage builds for smaller images
+- Don't run as root user
+- Use .dockerignore to exclude files
+- Keep images small with alpine variants
+- Use specific version tags, not "latest"
+
+## Conclusion
+
+Docker simplifies deployment and ensures consistency across environments. Start with basic containers, then move to docker-compose for multi-service applications.
+    `.trim(),
+  },
+  {
+    slug: "system-design-basics",
+    title: "System Design Basics — Building Scalable Applications",
+    excerpt: "Learn fundamental system design concepts. Load balancing, caching, databases, microservices, and more. Essential knowledge for building scalable web applications.",
+    category: "Backend",
+    date: "2025-02-25",
+    readTime: "16 min read",
+    tags: ["System Design", "Scalability", "Architecture", "Backend"],
+    content: `
+## What is System Design?
+
+System design is the process of architecting scalable, reliable, and maintainable software systems.
+
+## Key Principles
+
+- **Scalability** — handle increasing load
+- **Reliability** — system works consistently
+- **Availability** — system is accessible
+- **Performance** — fast response times
+
+## Load Balancing
+
+Distribute requests across multiple servers for better performance and reliability.
+
+## Caching Strategies
+
+\`\`\`javascript
+// Redis caching example
+const redis = require('redis');
+const client = redis.createClient();
+
+async function getUser(id) {
+  const cached = await client.get(\`user:\${id}\`);
+  if (cached) return JSON.parse(cached);
+  
+  const user = await db.user.findById(id);
+  await client.setex(\`user:\${id}\`, 3600, JSON.stringify(user));
+  return user;
+}
+\`\`\`
+
+## Database Scaling
+
+- **Vertical Scaling** — More CPU, RAM on single machine
+- **Horizontal Scaling** — Multiple database servers
+- **Read Replicas** — Separate read and write operations
+- **Sharding** — Split data across multiple databases
+
+## Microservices vs Monolith
+
+**Monolith:** Single deployable unit
+**Microservices:** Multiple independent services
+
+Choose based on team size, complexity, and scaling needs.
+
+## API Design Best Practices
+
+\`\`\`
+GET    /api/users      → List users
+GET    /api/users/123  → Get user
+POST   /api/users      → Create user
+PUT    /api/users/123  → Update user
+DELETE /api/users/123  → Delete user
+\`\`\`
+
+## Message Queues
+
+Handle asynchronous processing for better user experience and system reliability.
+
+## Monitoring & Security
+
+- Track response time, error rate, throughput
+- Use HTTPS, authentication, rate limiting
+- Implement proper logging and alerting
+
+## Conclusion
+
+System design is about making trade-offs. Start simple, measure performance, and scale incrementally based on actual needs.
+    `.trim(),
+  },
+  {
+    slug: "react-performance-optimization",
+    title: "React Performance Optimization — Complete Guide",
+    excerpt: "Master React performance with memo, useMemo, useCallback, code splitting, and more. Practical techniques to make your React apps lightning fast.",
+    category: "Web Dev",
+    date: "2025-03-01",
+    readTime: "13 min read",
+    tags: ["React", "Performance", "Optimization", "JavaScript"],
+    content: `
+## Why Performance Matters
+
+Slow React apps lead to poor user experience, higher bounce rates, and lower conversions.
+
+## React.memo
+
+Prevent unnecessary re-renders of components:
+
+\`\`\`jsx
+// Without memo - re-renders on every parent update
+function ExpensiveComponent({ data }) {
+  return <div>{data.name}</div>;
+}
+
+// With memo - only re-renders when props change
+const ExpensiveComponent = React.memo(function ExpensiveComponent({ data }) {
+  return <div>{data.name}</div>;
+});
+
+// Custom comparison
+const ExpensiveComponent = React.memo(function ExpensiveComponent({ data }) {
+  return <div>{data.name}</div>;
+}, (prevProps, nextProps) => {
+  return prevProps.data.id === nextProps.data.id;
+});
+\`\`\`
+
+## useMemo Hook
+
+Memoize expensive calculations:
+
+\`\`\`jsx
+function ProductList({ products, filter }) {
+  // ❌ Expensive calculation on every render
+  const filteredProducts = products.filter(p => 
+    p.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  // ✅ Memoized - only recalculates when dependencies change
+  const filteredProducts = useMemo(() => {
+    return products.filter(p => 
+      p.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  }, [products, filter]);
+
+  return (
+    <ul>
+      {filteredProducts.map(product => (
+        <li key={product.id}>{product.name}</li>
+      ))}
+    </ul>
+  );
+}
+\`\`\`
+
+## useCallback Hook
+
+Memoize function references:
+
+\`\`\`jsx
+function TodoList({ todos }) {
+  const [filter, setFilter] = useState('');
+
+  // ❌ New function on every render
+  const handleToggle = (id) => {
+    // Toggle todo logic
+  };
+
+  // ✅ Memoized function
+  const handleToggle = useCallback((id) => {
+    // Toggle todo logic
+  }, []);
+
+  return (
+    <div>
+      {todos.map(todo => (
+        <TodoItem 
+          key={todo.id} 
+          todo={todo} 
+          onToggle={handleToggle} 
+        />
+      ))}
+    </div>
+  );
+}
+\`\`\`
+
+## Code Splitting
+
+Split your bundle for faster initial load:
+
+\`\`\`jsx
+// Route-based splitting
+import { lazy, Suspense } from 'react';
+
+const Dashboard = lazy(() => import('./Dashboard'));
+const Profile = lazy(() => import('./Profile'));
+
+function App() {
+  return (
+    <Router>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </Suspense>
+    </Router>
+  );
+}
+
+// Component-based splitting
+const HeavyChart = lazy(() => import('./HeavyChart'));
+
+function Analytics() {
+  const [showChart, setShowChart] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setShowChart(true)}>Show Chart</button>
+      {showChart && (
+        <Suspense fallback={<div>Loading chart...</div>}>
+          <HeavyChart />
+        </Suspense>
+      )}
+    </div>
+  );
+}
+\`\`\`
+
+## Virtual Scrolling
+
+Handle large lists efficiently:
+
+\`\`\`jsx
+import { FixedSizeList as List } from 'react-window';
+
+function VirtualizedList({ items }) {
+  const Row = ({ index, style }) => (
+    <div style={style}>
+      {items[index].name}
+    </div>
+  );
+
+  return (
+    <List
+      height={600}
+      itemCount={items.length}
+      itemSize={50}
+    >
+      {Row}
+    </List>
+  );
+}
+\`\`\`
+
+## State Management Optimization
+
+\`\`\`jsx
+// ❌ Single large state object
+const [state, setState] = useState({
+  user: null,
+  posts: [],
+  comments: [],
+  loading: false
+});
+
+// ✅ Split state by concern
+const [user, setUser] = useState(null);
+const [posts, setPosts] = useState([]);
+const [comments, setComments] = useState([]);
+const [loading, setLoading] = useState(false);
+
+// ✅ Use useReducer for complex state
+const [state, dispatch] = useReducer(reducer, initialState);
+\`\`\`
+
+## Image Optimization
+
+\`\`\`jsx
+// ✅ Next.js Image component
+import Image from 'next/image';
+
+function ProductCard({ product }) {
+  return (
+    <div>
+      <Image
+        src={product.image}
+        alt={product.name}
+        width={300}
+        height={200}
+        loading="lazy"
+        placeholder="blur"
+      />
+    </div>
+  );
+}
+
+// ✅ Lazy loading with Intersection Observer
+function LazyImage({ src, alt }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const imgRef = useRef();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsLoaded(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (imgRef.current) {
+      observer.observe(imgRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={imgRef}>
+      {isLoaded && <img src={src} alt={alt} />}
+    </div>
+  );
+}
+\`\`\`
+
+## Bundle Analysis
+
+\`\`\`bash
+# Analyze your bundle size
+npx webpack-bundle-analyzer build/static/js/*.js
+
+# Or with Create React App
+npm run build -- --analyze
+\`\`\`
+
+## Performance Monitoring
+
+\`\`\`jsx
+// Measure component render time
+function ProfiledComponent() {
+  return (
+    <Profiler
+      id="MyComponent"
+      onRender={(id, phase, actualDuration) => {
+        console.log('Render time:', actualDuration);
+      }}
+    >
+      <MyComponent />
+    </Profiler>
+  );
+}
+
+// Use React DevTools Profiler
+// Chrome DevTools Performance tab
+// Web Vitals measurement
+\`\`\`
+
+## Common Performance Pitfalls
+
+1. **Inline objects/functions in JSX**
+2. **Not using keys properly in lists**
+3. **Unnecessary re-renders from context**
+4. **Large bundle sizes**
+5. **Blocking the main thread**
+
+## Conclusion
+
+React performance optimization is about identifying bottlenecks and applying the right techniques. Use React DevTools Profiler to measure before and after optimizations.
+    `.trim(),
+  },
+  {
+    slug: "rest-api-design-nodejs",
+    title: "REST API Design with Node.js — Best Practices",
+    excerpt: "Build robust REST APIs with Node.js and Express. Authentication, validation, error handling, testing, and deployment. Complete guide with real examples.",
+    category: "Backend",
+    date: "2025-03-05",
+    readTime: "15 min read",
+    tags: ["Node.js", "Express", "REST API", "Backend"],
+    content: `
+## REST API Fundamentals
+
+REST (Representational State Transfer) is an architectural style for designing web APIs using HTTP methods and status codes.
+
+## HTTP Methods
+
+\`\`\`
+GET    /api/users      → Retrieve users
+POST   /api/users      → Create user
+GET    /api/users/123  → Retrieve specific user
+PUT    /api/users/123  → Update entire user
+PATCH  /api/users/123  → Partial update
+DELETE /api/users/123  → Delete user
+\`\`\`
+
+## Project Setup
+
+\`\`\`bash
+npm init -y
+npm install express mongoose joi bcryptjs jsonwebtoken
+npm install -D nodemon jest supertest
+\`\`\`
+
+## Basic Express Server
+
+\`\`\`javascript
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.use('/api/users', require('./routes/users'));
+app.use('/api/auth', require('./routes/auth'));
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(\`Server running on port \${PORT}\`);
+});
+\`\`\`
+
+## Database Models
+
+\`\`\`javascript
+// models/User.js
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 50
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 6
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  }
+}, {
+  timestamps: true
+});
+
+// Hash password before saving
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+});
+
+// Compare password method
+userSchema.methods.comparePassword = async function(password) {
+  return bcrypt.compare(password, this.password);
+};
+
+module.exports = mongoose.model('User', userSchema);
+\`\`\`
+
+## Input Validation
+
+\`\`\`javascript
+const Joi = require('joi');
+
+// Validation schemas
+const registerSchema = Joi.object({
+  name: Joi.string().min(2).max(50).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required()
+});
+
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required()
+});
+
+// Validation middleware
+const validate = (schema) => {
+  return (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message
+      });
+    }
+    next();
+  };
+};
+
+module.exports = { validate, registerSchema, loginSchema };
+\`\`\`
+
+## Authentication & Authorization
+
+\`\`\`javascript
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+
+// Generate JWT token
+const generateToken = (userId) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: '7d'
+  });
+};
+
+// Auth middleware
+const auth = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    
+    if (!token) {
+      return res.status(401).json({ error: 'Access denied. No token provided.' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId).select('-password');
+    
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid token.' });
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token.' });
+  }
+};
+
+// Admin middleware
+const admin = (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Access denied. Admin required.' });
+  }
+  next();
+};
+
+module.exports = { generateToken, auth, admin };
+\`\`\`
+
+## User Routes
+
+\`\`\`javascript
+// routes/users.js
+const express = require('express');
+const User = require('../models/User');
+const { auth, admin } = require('../middleware/auth');
+const { validate, registerSchema } = require('../middleware/validation');
+const router = express.Router();
+
+// GET /api/users - Get all users (admin only)
+router.get('/', auth, admin, async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const users = await User.find()
+      .select('-password')
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: -1 });
+    
+    const total = await User.countDocuments();
+    
+    res.json({
+      users,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      total
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET /api/users/:id - Get user by ID
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Users can only view their own profile (unless admin)
+    if (req.user.id !== user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT /api/users/:id - Update user
+router.put('/:id', auth, validate(registerSchema), async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    
+    // Users can only update their own profile (unless admin)
+    if (req.user.id !== req.params.id && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { name, email },
+      { new: true, runValidators: true }
+    ).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE /api/users/:id - Delete user
+router.delete('/:id', auth, admin, async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;
+\`\`\`
+
+## Error Handling
+
+\`\`\`javascript
+// Custom error class
+class AppError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+    this.isOperational = true;
+  }
+}
+
+// Global error handler
+const errorHandler = (err, req, res, next) => {
+  let error = { ...err };
+  error.message = err.message;
+
+  // Mongoose bad ObjectId
+  if (err.name === 'CastError') {
+    const message = 'Resource not found';
+    error = new AppError(message, 404);
+  }
+
+  // Mongoose duplicate key
+  if (err.code === 11000) {
+    const message = 'Duplicate field value entered';
+    error = new AppError(message, 400);
+  }
+
+  // Mongoose validation error
+  if (err.name === 'ValidationError') {
+    const message = Object.values(err.errors).map(val => val.message);
+    error = new AppError(message, 400);
+  }
+
+  res.status(error.statusCode || 500).json({
+    success: false,
+    error: error.message || 'Server Error'
+  });
+};
+
+module.exports = { AppError, errorHandler };
+\`\`\`
+
+## Rate Limiting
+
+\`\`\`javascript
+const rateLimit = require('express-rate-limit');
+
+// General rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.'
+});
+
+// Strict rate limiting for auth routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 5 requests per windowMs
+  message: 'Too many authentication attempts, please try again later.'
+});
+
+app.use('/api/', limiter);
+app.use('/api/auth', authLimiter);
+\`\`\`
+
+## Testing
+
+\`\`\`javascript
+// tests/auth.test.js
+const request = require('supertest');
+const app = require('../app');
+const User = require('../models/User');
+
+describe('Auth Endpoints', () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+  });
+
+  describe('POST /api/auth/register', () => {
+    it('should register a new user', async () => {
+      const userData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: 'password123'
+      };
+
+      const res = await request(app)
+        .post('/api/auth/register')
+        .send(userData)
+        .expect(201);
+
+      expect(res.body).toHaveProperty('token');
+      expect(res.body.user.email).toBe(userData.email);
+      expect(res.body.user).not.toHaveProperty('password');
+    });
+
+    it('should not register user with invalid email', async () => {
+      const userData = {
+        name: 'John Doe',
+        email: 'invalid-email',
+        password: 'password123'
+      };
+
+      await request(app)
+        .post('/api/auth/register')
+        .send(userData)
+        .expect(400);
+    });
+  });
+});
+\`\`\`
+
+## Environment Configuration
+
+\`\`\`bash
+# .env
+NODE_ENV=development
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/myapi
+JWT_SECRET=your-super-secret-jwt-key
+\`\`\`
+
+## Deployment
+
+\`\`\`javascript
+// Production considerations
+const helmet = require('helmet');
+const compression = require('compression');
+const cors = require('cors');
+
+// Security middleware
+app.use(helmet());
+app.use(compression());
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true
+}));
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+\`\`\`
+
+## Conclusion
+
+Building robust REST APIs requires attention to security, validation, error handling, and testing. Start with a solid foundation and add features incrementally.
+    `.trim(),
+  },
 ];
 
 export const categories = ["All", ...Array.from(new Set(blogPosts.map((p) => p.category)))];

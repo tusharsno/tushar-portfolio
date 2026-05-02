@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import TableOfContents from "@/components/blog/TableOfContents";
 import ReadingProgress from "@/components/blog/ReadingProgress";
 import CopyButton from "@/components/blog/CopyButton";
+import ShareButtons from "@/components/blog/ShareButtons";
+import { createHighlighter } from "shiki";
 
 export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
@@ -33,7 +35,15 @@ function extractHeadings(content: string) {
     });
 }
 
-function renderContent(content: string) {
+// Supported languages for shiki
+const SUPPORTED_LANGS = ["tsx", "ts", "typescript", "js", "javascript", "jsx", "bash", "cpp", "python", "prisma", "json", "css", "html"];
+
+async function renderContent(content: string) {
+  const highlighter = await createHighlighter({
+    themes: ["github-dark"],
+    langs: SUPPORTED_LANGS,
+  });
+
   const lines = content.split("\n");
   const elements: React.ReactNode[] = [];
   let i = 0;
@@ -59,24 +69,30 @@ function renderContent(content: string) {
         codeLines.push(lines[i]);
         i++;
       }
+      const code = codeLines.join("\n");
+      const validLang = SUPPORTED_LANGS.includes(lang) ? lang : "bash";
+      const highlighted = highlighter.codeToHtml(code, {
+        lang: validLang,
+        theme: "github-dark",
+      });
+
       elements.push(
         <div key={key} className="my-6 rounded-2xl overflow-hidden border border-[var(--border)] shadow-lg">
           <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-[var(--border)]"
-            style={{ background: "linear-gradient(135deg, var(--card-2) 0%, var(--card) 100%)" }}
+            style={{ background: "#161b22" }}
           >
             <span className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
             <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
             <span className="w-2.5 h-2.5 rounded-full bg-green-400/70" />
-            {lang && <span className="text-[10px] text-[var(--muted)] font-mono ml-2 bg-[var(--background)] border border-[var(--border)] px-2 py-0.5 rounded-md">{lang}</span>}
+            {lang && <span className="text-[10px] text-zinc-400 font-mono ml-2 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded-md">{lang}</span>}
             <div className="ml-auto">
-              <CopyButton code={codeLines.join("\n")} />
+              <CopyButton code={code} />
             </div>
           </div>
-          <pre className="p-5 overflow-x-auto bg-[var(--card)]">
-            <code className="text-xs font-mono text-[var(--foreground)] leading-6">
-              {codeLines.join("\n")}
-            </code>
-          </pre>
+          <div
+            className="overflow-x-auto text-xs leading-6 [&>pre]:p-5 [&>pre]:!bg-[#0d1117] [&>pre]:m-0"
+            dangerouslySetInnerHTML={{ __html: highlighted }}
+          />
         </div>
       );
     } else if (line.startsWith("- ")) {
@@ -130,6 +146,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const prevPost = currentIndex > 0 ? blogPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < blogPosts.length - 1 ? blogPosts[currentIndex + 1] : null;
   const badgeClass = categoryColor[post.category] ?? "bg-[var(--accent-subtle)] border-[var(--border)] text-[var(--muted)]";
+  const renderedContent = await renderContent(post.content);
 
   return (
     <>
@@ -193,10 +210,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   ))}
                 </div>
               </div>
+
+              {/* Share */}
+              <div className="pt-4">
+                <ShareButtons
+                  title={post.title}
+                  url={`https://tushar-portfolio-swart.vercel.app/blog/${post.slug}`}
+                />
+              </div>
             </div>
 
             {/* Body */}
-            <div className="prose-custom">{renderContent(post.content)}</div>
+            <div className="prose-custom">{renderedContent}</div>
 
             {/* Prev / Next */}
             <div className="mt-16 pt-10 border-t border-[var(--border)] grid grid-cols-2 gap-4">
