@@ -217,10 +217,10 @@ export default function Hero() {
                 <Download size={13} />Download CV
               </a>
               <button
-                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white text-sm font-semibold hover:bg-white/20 transition-all duration-200"
+                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white text-sm font-semibold hover:bg-white/20 transition-all duration-200 cursor-pointer"
               >
-                View Projects<ArrowUpRight size={13} />
+                Hire Me<ArrowUpRight size={13} />
               </button>
             </motion.div>
 
