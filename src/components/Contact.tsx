@@ -44,7 +44,7 @@ export default function Contact() {
   return (
     <>
       {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} />}
-    <section id="contact" className="relative py-28 px-6">
+      <section id="contact" className="relative py-28 px-6">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--border-2)] to-transparent" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
@@ -195,7 +195,7 @@ export default function Contact() {
 
         </div>
       </div>
-    </section>
-    </>  
+      </section>
+    </>
   );
 }

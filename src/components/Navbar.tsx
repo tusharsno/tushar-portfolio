@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { personal } from "@/data/portfolio";
 
-const sectionLinks = ["About", "Skills", "Projects", "Experience", "Contact"];
+const sectionLinks = ["About", "Skills", "Projects", "Experience", "Services", "Contact"];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);

@@ -10,6 +10,7 @@ const navLinks = [
   { label: "Skills",     id: "skills"     },
   { label: "Projects",   id: "projects"   },
   { label: "Experience", id: "experience" },
+  { label: "Services",   id: "services"   },
   { label: "Contact",    id: "contact"    },
 ];
 
@@ -20,10 +21,8 @@ export default function Footer() {
   
   const scrollTo = (id: string) => {
     if (pathname !== "/") {
-      // Blog page থেকে home page এ redirect
       window.location.href = `/#${id}`;
     } else {
-      // Home page এ scroll
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }
   };
