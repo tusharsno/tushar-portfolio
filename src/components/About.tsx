@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { CheckCircle2, Download, ArrowUpRight } from "lucide-react";
+import { CheckCircle2, Copy, Check, FileText } from "lucide-react";
 import { about, personal } from "@/data/portfolio";
 import AnimatedCounter from "@/components/AnimatedCounter";
 
@@ -10,6 +10,13 @@ export default function About() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [imageError, setImageError] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  function copyEmail() {
+    navigator.clipboard.writeText(personal.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   return (
     <section id="about" className="relative py-28 px-6 overflow-hidden">
@@ -145,22 +152,22 @@ export default function About() {
             </ul>
 
             {/* CTAs */}
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div className="flex flex-col gap-3 pt-2">
               <a
                 href={personal.resumeUrl}
-                download
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[var(--btn-text)] text-sm font-semibold hover:opacity-90 hover:scale-[1.03] transition-all duration-200"
-              >
-                <Download size={13} />Download CV
-              </a>
-              <a
-                href={personal.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--border)] text-sm font-semibold hover:bg-[var(--accent-subtle)] hover:border-[var(--border-2)] transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--accent)] text-[var(--btn-text)] text-sm font-semibold hover:opacity-90 hover:scale-[1.03] transition-all duration-200"
               >
-                GitHub Profile<ArrowUpRight size={13} />
+                <FileText size={13} />View Resume
               </a>
+              <button
+                onClick={copyEmail}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-[var(--border)] text-sm font-semibold hover:bg-[var(--accent-subtle)] hover:border-[var(--border-2)] transition-all duration-200"
+              >
+                {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                {copied ? "Copied!" : "Copy Email"}
+              </button>
             </div>
           </motion.div>
 
