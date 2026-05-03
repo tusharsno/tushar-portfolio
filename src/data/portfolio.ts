@@ -115,7 +115,7 @@ export const projects = [
     live: "https://dsaplatform.vercel.app",
     category: "Full Stack",
     emoji: "🧠",
-    image: "/projects_ss/dsa-platform-ss.png",
+    image: "/projects_ss/dsa-platform-ss_02.png",
     featured: true,
   },
   {
