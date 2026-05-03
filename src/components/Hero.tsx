@@ -214,7 +214,7 @@ export default function Hero() {
                 href={personal.resumeUrl} download
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-sm font-semibold hover:opacity-90 hover:scale-[1.03] transition-all duration-200"
               >
-                <Download size={13} />Download CV
+                <Download size={13} />Download Resume
               </a>
               <button
                 onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
