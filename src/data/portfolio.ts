@@ -6,7 +6,7 @@ export const personal = {
   email: "tusharcoder269@gmail.com",
   github: "https://github.com/tusharsno",
   linkedin: "https://www.linkedin.com/in/tushar-barua-0b657b272",
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "/Tushar_Resume.pdf",
   location: "Bangladesh",
   avatar: "/tushar-image/coding-in-office.jpeg",
 };

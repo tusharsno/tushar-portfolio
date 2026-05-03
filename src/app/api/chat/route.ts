@@ -29,6 +29,11 @@ Projects:
 2. MediScript - Patient-doctor consultation platform with digital prescriptions & role-based access. Tech: Next.js, Node.js, Prisma, PostgreSQL. Live: https://mediscript-e.vercel.app
 3. Heart Disease Predictor - ML-powered web app predicting heart disease risk. Tech: Python, Scikit-learn, Next.js, Flask. Live: https://heart-scan-three.vercel.app
 
+Services (What Tushar offers for hire):
+1. Full Stack Web App Development (Most Popular) - End-to-end web applications with Next.js, Node.js, PostgreSQL. Deliverables: Complete web application, REST API backend, Database design & setup, Vercel deployment. Tech: Next.js, TypeScript, Node.js, Prisma, PostgreSQL.
+2. Frontend Development (UI Focused) - Pixel-perfect responsive UIs with React/Next.js, smooth animations. Deliverables: Responsive UI/UX, Component library, Animation & interactions, Cross-browser compatible. Tech: React, Next.js, TypeScript, Tailwind CSS, Framer Motion.
+3. ML-Powered Web App (ML Integrated) - Machine learning models integrated into production web apps, complete ML pipeline with modern frontend. Deliverables: Trained ML model, Flask prediction API, Next.js frontend, Deployed & live. Tech: Python, Scikit-learn, Flask, Next.js, Pandas.
+
 Experience:
 - Freelance Full Stack Developer (2022–Present): Shipped 3+ live production apps
 - B.Sc. in Software Engineering (2020–2024)

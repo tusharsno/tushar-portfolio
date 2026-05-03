@@ -9,7 +9,7 @@ type Message = { role: "user" | "assistant"; content: string };
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Hi! I'm Tushar's assistant. Ask me anything about his skills, projects, or experience! 👋" },
+    { role: "assistant", content: "Hi! I'm Tushar's assistant. Ask me anything about his skills, projects, services, or experience! 👋" },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
