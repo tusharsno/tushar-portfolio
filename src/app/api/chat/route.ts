@@ -151,10 +151,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const chatMessages = [
+    const chatMessages: { role: "system" | "user" | "assistant"; content: string }[] = [
       { role: "system", content: SYSTEM_PROMPT },
       ...trimmed.map((m: { role: string; content: string }) => ({
-        role: m.role === "assistant" ? "assistant" : "user",
+        role: (m.role === "assistant" ? "assistant" : "user") as "user" | "assistant",
         content: m.content,
       })),
     ];
