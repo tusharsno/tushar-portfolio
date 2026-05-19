@@ -17,7 +17,7 @@ export const about = {
     "Solved 250+ problems on Codeforces across various difficulty ratings",
     "Participated in 20+ competitive programming contests",
     "Actively solving problems on LeetCode to sharpen DSA skills",
-    "Building full-stack projects with Next.js 16, Prisma & PostgreSQL",
+    "Building full-stack projects with Next.js, Prisma & PostgreSQL",
   ],
   stats: [
     { label: "Problems Solved", value: "250+", platform: "Codeforces", color: "#3f3f46" },

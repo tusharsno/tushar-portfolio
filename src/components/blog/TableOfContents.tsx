@@ -56,9 +56,9 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
         </p>
 
         <div className="relative border-l border-[var(--border)]">
-          {headings.map(({ id, text }) => (
+          {headings.map(({ id, text }, index) => (
             <a
-              key={id}
+              key={`${id}-${index}`}
               href={`#${id}`}
               onClick={(e) => {
                 e.preventDefault();

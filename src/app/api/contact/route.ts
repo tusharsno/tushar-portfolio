@@ -4,8 +4,13 @@ import { rateLimit } from "@/lib/rateLimit";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-function sanitize(str: string) {
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+// Sanitize only for HTML display — never use on email headers
+function sanitizeHtml(str: string) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 export async function POST(request: NextRequest) {
@@ -26,15 +31,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
     }
 
-    const safeName    = sanitize(String(name).slice(0, 100));
-    const safeEmail   = sanitize(String(email).slice(0, 200));
-    const safeMessage = sanitize(String(message).slice(0, 2000));
+    // Raw values for email headers (replyTo must not be HTML-encoded)
+    const rawName    = String(name).slice(0, 100);
+    const rawEmail   = String(email).slice(0, 200);
+    const rawMessage = String(message).slice(0, 2000);
+
+    // HTML-safe values only for the email body
+    const safeName    = sanitizeHtml(rawName);
+    const safeEmail   = sanitizeHtml(rawEmail);
+    const safeMessage = sanitizeHtml(rawMessage);
 
     const { error } = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
       to: "tusharcoder269@gmail.com",
-      replyTo: safeEmail,
-      subject: `New message from ${safeName}`,
+      replyTo: rawEmail,  // use raw email — not HTML-encoded
+      subject: `New message from ${rawName}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #111;">New Contact Message</h2>
@@ -49,7 +60,8 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("[Contact API Error]", error.message);
+      return NextResponse.json({ error: "Failed to send message." }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });

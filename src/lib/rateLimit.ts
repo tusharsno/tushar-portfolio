@@ -1,3 +1,8 @@
+// NOTE: This in-memory rate limiter works correctly in development and
+// single-process Node.js servers. On Vercel (serverless/edge), each
+// invocation may run in a separate instance so the store can reset.
+// For production-grade rate limiting, replace with Upstash Redis or Vercel KV.
+
 type RateLimitEntry = { count: number; resetAt: number };
 
 const store = new Map<string, RateLimitEntry>();
