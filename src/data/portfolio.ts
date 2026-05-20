@@ -8,7 +8,7 @@ export const personal = {
   linkedin: "https://www.linkedin.com/in/tushar-barua-0b657b272",
   resumeUrl: "/Tushar_Resume.pdf",
   location: "Bangladesh",
-  avatar: "/tushar-image/coding-in-office.jpeg",
+  avatar: "/tushar-image/Tushar_Pic.jpeg",
 };
 
 export const about = {
@@ -22,8 +22,8 @@ export const about = {
   stats: [
     { label: "Problems Solved", value: "250+", platform: "Codeforces", color: "#3f3f46" },
     { label: "Contests",        value: "20+",  platform: "Participated", color: "#3f3f46" },
-    { label: "LeetCode",        value: "Active",platform: "Problem Solving", color: "#3f3f46" },
-    { label: "Projects",        value: "10+",  platform: "Full Stack",   color: "#3f3f46" },
+    { label: "LeetCode",        value: "50+",  platform: "Problem Solving", color: "#3f3f46" },
+    { label: "Projects",        value: "3+",   platform: "Full Stack",   color: "#3f3f46" },
   ],
 };
 
@@ -71,11 +71,11 @@ export const skills = [
     emoji: "☕",
     color: "#18181b",
     items: [
-      { name: "Java OOP",             level: 80 },
-      { name: "Java Swing",           level: 75 },
-      { name: "GUI Design",           level: 70 },
-      { name: "Hotel Mgmt App",       level: 70 },
-      { name: "Scientific Calculator",level: 70 },
+      { name: "Java OOP",       level: 80 },
+      { name: "Java Swing",     level: 75 },
+      { name: "GUI Design",     level: 70 },
+      { name: "AWT",            level: 65 },
+      { name: "JDBC",           level: 65 },
     ],
   },
   {

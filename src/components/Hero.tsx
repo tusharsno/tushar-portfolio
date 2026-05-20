@@ -99,7 +99,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden dark" style={{ colorScheme: "dark" }}>
+    <section className="relative min-h-screen flex items-center overflow-hidden">
 
       {/* Background image */}
       <motion.div
@@ -241,7 +241,7 @@ export default function Hero() {
                 </a>
               ))}
               <span className="w-px h-4 bg-white/20" />
-              <span className="text-xs text-white/40">{personal.email}</span>
+              <a href={`mailto:${personal.email}`} className="text-xs text-white/40 hover:text-white/70 transition-colors duration-200">hire me</a>
             </motion.div>
 
           </div>

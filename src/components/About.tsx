@@ -47,7 +47,7 @@ export default function About() {
           >
             {/* Photo card */}
             <div className="relative rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--card)] p-1">
-              <div className="relative w-full rounded-lg overflow-hidden" style={{ aspectRatio: "3/4" }}>
+              <div className="relative w-full rounded-lg overflow-hidden" style={{ aspectRatio: "1/1" }}>
                 {imageError ? (
                   <div className="w-full h-full bg-[var(--card-2)] flex items-center justify-center">
                     <div className="text-center">
@@ -61,7 +61,7 @@ export default function About() {
                       src={personal.avatar}
                       alt={personal.name}
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-[center_top]"
                       priority
                       onError={() => setImageError(true)}
                     />
