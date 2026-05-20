@@ -72,8 +72,7 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
       />
 
       <div
-        className="relative z-10 rounded-xl border border-transparent group-hover:border-[var(--border)] overflow-hidden flex flex-col h-full transition-colors duration-300 hover:shadow-2xl"
-        style={{ background: "linear-gradient(135deg, var(--card) 0%, var(--card-2) 100%)" }}
+        className="relative z-10 bg-[var(--card)] border border-transparent group-hover:border-[var(--border)] rounded-xl overflow-hidden flex flex-col h-full transition-colors duration-300 hover:shadow-2xl"
       >
         {/* Top color bar */}
         <div className="h-1 w-full" style={{ background: `linear-gradient(to right, ${service.topColor}, transparent)` }} />

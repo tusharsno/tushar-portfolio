@@ -20,6 +20,7 @@ const typeConfig: Record<string, {
   borderColor: string;
   glowColor: string;
   badgeBg: string;
+  dotColor: string;
 }> = {
   work: {
     icon: Briefcase,
@@ -28,6 +29,7 @@ const typeConfig: Record<string, {
     borderColor: "border-l-[var(--foreground)]",
     glowColor: "rgba(237,237,237,0.06)",
     badgeBg: "bg-[var(--accent-subtle)] border-[var(--border-2)] text-[var(--muted)]",
+    dotColor: "bg-white/60",
   },
   education: {
     icon: GraduationCap,
@@ -36,6 +38,7 @@ const typeConfig: Record<string, {
     borderColor: "border-l-blue-400",
     glowColor: "rgba(96,165,250,0.06)",
     badgeBg: "bg-blue-500/10 border-blue-500/20 text-blue-400",
+    dotColor: "bg-blue-400",
   },
   youtube: {
     icon: YoutubeIcon,
@@ -44,6 +47,7 @@ const typeConfig: Record<string, {
     borderColor: "border-l-red-400",
     glowColor: "rgba(248,113,113,0.06)",
     badgeBg: "bg-red-500/10 border-red-500/20 text-red-400",
+    dotColor: "bg-red-400",
   },
   cp: {
     icon: Code2,
@@ -52,6 +56,7 @@ const typeConfig: Record<string, {
     borderColor: "border-l-emerald-400",
     glowColor: "rgba(52,211,153,0.06)",
     badgeBg: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
+    dotColor: "bg-emerald-400",
   },
 };
 
@@ -73,6 +78,10 @@ function TimelineItem({ item, i }: { item: typeof experience[0]; i: number }) {
       <div className="flex flex-col items-center">
         <div className={`relative z-10 w-11 h-11 rounded-lg flex items-center justify-center shrink-0 border bg-[var(--card)] border-[var(--border)]`}>
           <Icon size={15} className={cfg.textColor} />
+          {/* Pulse dot */}
+          <span className={`absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border-2 border-[var(--card)] ${cfg.dotColor}`}>
+            <span className={`absolute inset-0 rounded-full ${cfg.dotColor} animate-ping opacity-75`} />
+          </span>
         </div>
         {i < experience.length - 1 && (
           <motion.div
@@ -89,12 +98,12 @@ function TimelineItem({ item, i }: { item: typeof experience[0]; i: number }) {
       <div className="pb-10">
         <motion.div
           whileHover={{ x: 4, transition: { duration: 0.2 } }}
-          className={`relative overflow-hidden rounded-xl border border-[var(--border)] border-l-2 ${cfg.borderColor} transition-all duration-300 hover:shadow-2xl`}
+          className={`group relative overflow-hidden rounded-xl border border-[var(--border)] border-l-2 ${cfg.borderColor} transition-all duration-300 hover:shadow-2xl`}
           style={{
             background: `linear-gradient(135deg, var(--card) 0%, var(--card-2) 100%)`,
           }}
         >
-          {/* Subtle glow behind card based on type */}
+          {/* Glow on hover */}
           <div
             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl"
             style={{ background: `radial-gradient(ellipse at 0% 50%, ${cfg.glowColor} 0%, transparent 60%)` }}
@@ -182,10 +191,10 @@ export default function Experience() {
 
         {/* Section label */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -24 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
           className="flex items-center gap-3 mb-14"
         >
           <span className="h-px w-10 bg-[var(--accent)]" />

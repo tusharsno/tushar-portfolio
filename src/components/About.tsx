@@ -26,10 +26,10 @@ export default function About() {
 
         {/* Section label */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -24 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
           className="flex items-center gap-3 mb-14"
         >
           <span className="h-px w-10 bg-[var(--accent)]" />
@@ -46,7 +46,7 @@ export default function About() {
             className="flex flex-col gap-4"
           >
             {/* Photo card */}
-            <div className="relative rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--card)] p-1">
+            <div className="group relative rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--card)] p-1 hover:border-[var(--border-2)] transition-colors duration-300">
               <div className="relative w-full rounded-lg overflow-hidden" style={{ aspectRatio: "1/1" }}>
                 {imageError ? (
                   <div className="w-full h-full bg-[var(--card-2)] flex items-center justify-center">
@@ -61,7 +61,7 @@ export default function About() {
                       src={personal.avatar}
                       alt={personal.name}
                       fill
-                      className="object-cover object-[center_top]"
+                      className="object-cover object-[center_top] transition-transform duration-500 group-hover:scale-105"
                       priority
                       onError={() => setImageError(true)}
                     />

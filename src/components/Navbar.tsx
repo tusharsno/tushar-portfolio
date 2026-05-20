@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import ThemeToggle from "./ThemeToggle";
 import { personal } from "@/data/portfolio";
 
@@ -163,32 +164,48 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {open && (
-        <div className="md:hidden bg-[var(--background)] border-b border-[var(--border)] px-6 py-3 space-y-1">
-          {isHome && sectionLinks.map((link) => (
-            <button
-              key={link}
-              onClick={() => scrollTo(link.toLowerCase())}
-              className="block w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--accent-subtle)] transition-colors"
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="md:hidden bg-[var(--background)] border-b border-[var(--border)] px-6 py-3 space-y-1"
+          >
+            {isHome && sectionLinks.map((link, i) => (
+              <motion.button
+                key={link}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.15, delay: i * 0.04 }}
+                onClick={() => scrollTo(link.toLowerCase())}
+                className="block w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--accent-subtle)] transition-colors"
+              >
+                {link}
+              </motion.button>
+            ))}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.15, delay: sectionLinks.length * 0.04 }}
+              className="pt-2 border-t border-[var(--border)]"
             >
-              {link}
-            </button>
-          ))}
-          <div className="pt-2 border-t border-[var(--border)]">
-            <Link
-              href="/blog"
-              onClick={() => setOpen(false)}
-              className={`block w-full text-center px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                isBlog
-                  ? "bg-[var(--accent)] text-[var(--btn-text)]"
-                  : "border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--accent-subtle)]"
-              }`}
-            >
-              Blog
-            </Link>
-          </div>
-        </div>
-      )}
+              <Link
+                href="/blog"
+                onClick={() => setOpen(false)}
+                className={`block w-full text-center px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                  isBlog
+                    ? "bg-[var(--accent)] text-[var(--btn-text)]"
+                    : "border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--accent-subtle)]"
+                }`}
+              >
+                Blog
+              </Link>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

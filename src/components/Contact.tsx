@@ -51,10 +51,10 @@ export default function Contact() {
 
         {/* Section label */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
           className="flex items-center gap-3 mb-14"
         >
           <span className="h-px w-10 bg-[var(--accent)]" />
@@ -95,7 +95,7 @@ export default function Contact() {
                   whileHover={{ x: 4, transition: { duration: 0.2 } }}
                   className="flex items-center gap-4 p-4 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:border-[var(--border-2)] hover:shadow-lg transition-all duration-200 group"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-center shrink-0 group-hover:border-[var(--border-2)] transition-colors">
+                  <div className="w-10 h-10 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-center shrink-0 group-hover:border-[var(--border-2)] group-hover:text-[var(--foreground)] group-hover:bg-[var(--accent-subtle)] transition-all duration-200 text-[var(--muted)]">
                     <Icon />
                   </div>
                   <div className="flex-1 min-w-0">

@@ -67,16 +67,24 @@ export default function Chatbot() {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
-              {messages.map((msg, i) => (
-                <div key={i} className={`flex gap-2 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${msg.role === "user" ? "bg-[var(--accent)]" : "bg-[var(--border-2)]"}`}>
-                    {msg.role === "user" ? <User size={12} className="text-[var(--btn-text)]" /> : <Bot size={12} className="text-[var(--foreground)]" />}
-                  </div>
-                  <div className={`max-w-[75%] px-3 py-2 rounded-xl text-sm leading-relaxed ${msg.role === "user" ? "bg-[var(--accent)] text-[var(--btn-text)] rounded-tr-sm" : "bg-[var(--accent-subtle)] text-[var(--foreground)] rounded-tl-sm border border-[var(--border)]"}`}>
-                    {msg.content}
-                  </div>
-                </div>
-              ))}
+              <AnimatePresence initial={false}>
+                {messages.map((msg, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className={`flex gap-2 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}
+                  >
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${msg.role === "user" ? "bg-[var(--accent)]" : "bg-[var(--border-2)]"}`}>
+                      {msg.role === "user" ? <User size={12} className="text-[var(--btn-text)]" /> : <Bot size={12} className="text-[var(--foreground)]" />}
+                    </div>
+                    <div className={`max-w-[75%] px-3 py-2 rounded-xl text-sm leading-relaxed ${msg.role === "user" ? "bg-[var(--accent)] text-[var(--btn-text)] rounded-tr-sm" : "bg-[var(--accent-subtle)] text-[var(--foreground)] rounded-tl-sm border border-[var(--border)]"}`}>
+                      {msg.content}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
               {loading && (
                 <div className="flex gap-2">
                   <div className="w-6 h-6 rounded-full bg-[var(--border-2)] flex items-center justify-center shrink-0">
@@ -120,13 +128,16 @@ export default function Chatbot() {
         onClick={() => setOpen((v) => !v)}
         whileHover={{ scale: 1.05, y: -2 }}
         whileTap={{ scale: 0.95 }}
-        className="w-14 h-14 rounded-full flex items-center justify-center"
+        className="relative w-14 h-14 rounded-full flex items-center justify-center"
         style={{
           background: open ? "var(--card-2)" : "linear-gradient(145deg, #1f1f1f, #111111)",
           boxShadow: open ? "none" : "0 0 0 1px rgba(255,255,255,0.1), 0 12px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.08)",
           border: open ? "1px solid var(--border)" : "none",
         }}
       >
+        {!open && (
+          <span className="absolute inset-0 rounded-full animate-ping bg-white/5" />
+        )}
         <AnimatePresence mode="wait">
           {open ? (
             <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>

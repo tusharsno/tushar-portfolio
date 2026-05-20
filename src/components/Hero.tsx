@@ -1,6 +1,6 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { MapPin, Download, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons";
@@ -47,6 +47,9 @@ const codeLines = [
 
 export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
 
   useEffect(() => {
     const t = setInterval(() => setRoleIndex((i) => (i + 1) % personal.roles.length), 2800);
@@ -99,14 +102,15 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
 
-      {/* Background image */}
+      {/* Background image — parallax */}
       <motion.div
         initial={{ opacity: 0, scale: 1.05 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.8, ease: "easeOut" }}
-        className="absolute inset-0 z-0"
+        style={{ y: bgY }}
+        className="absolute inset-0 z-0 will-change-transform"
       >
         <Image
           src="/tushar-image/codingtime-in-library.jpeg"
@@ -168,24 +172,36 @@ export default function Hero() {
               </motion.h1>
             </div>
 
-            {/* Role pill — animated */}
+            {/* Role switcher — animated with accent underline */}
             <motion.div
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.35 }}
-              className="flex items-center gap-2 h-7"
+              className="flex items-center gap-2"
             >
-              <div className="overflow-hidden flex items-center">
+              <div className="flex flex-col gap-1">
+                <div className="overflow-hidden h-5 flex items-center">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={roleIndex}
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0,  opacity: 1 }}
+                      exit={{   y: -20, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="text-sm font-semibold tracking-widest text-white/60 uppercase"
+                    >
+                      {personal.roles[roleIndex]}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={roleIndex}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0,  opacity: 1 }}
-                    exit={{   y: -20, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="text-sm font-semibold tracking-widest text-white/60 uppercase"
-                  >
-                    {personal.roles[roleIndex]}
-                  </motion.span>
+                    initial={{ scaleX: 0, originX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    exit={{ scaleX: 0, originX: 1 }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="block h-[2px] w-full bg-white/50 rounded-full"
+                  />
                 </AnimatePresence>
               </div>
               <motion.span

@@ -33,8 +33,8 @@ const iconMap: Record<string, SimpleIcon> = {
   "Java OOP":        siOpenjdk,
   "Java Swing":      siOpenjdk,
   "GUI Design":      siFigma,
-  "Hotel Mgmt App":  siSqlite,
-  "Scientific Calculator": siPython,
+  "AWT":             siOpenjdk,
+  "JDBC":            siOpenjdk,
   "Scikit-learn":    siScikitlearn,
   "Pandas":          siPandas,
   "Flask":           siFlask,
@@ -76,10 +76,10 @@ export default function Skills() {
 
         {/* Section label */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.85 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
           className="flex items-center gap-3 mb-14"
         >
           <span className="h-px w-10 bg-[var(--accent)]" />
