@@ -257,7 +257,7 @@ export default function Hero() {
                 </a>
               ))}
               <span className="w-px h-4 bg-white/20" />
-              <a href={`mailto:${personal.email}`} className="text-xs text-white/40 hover:text-white/70 transition-colors duration-200">hire me</a>
+              <span className="text-xs text-white/40">{personal.email}</span>
             </motion.div>
 
           </div>
