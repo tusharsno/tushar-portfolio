@@ -112,7 +112,7 @@ export default function BlogClient() {
                   exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3, delay: i * 0.06 }}
                   whileHover={{ y: -4 }}
                 >
-                  <Link href={`/blog/${post.slug}`} className="group block h-full">
+                  <Link href={post.customHref ?? `/blog/${post.slug}`} className="group block h-full">
                     <article
                       className="h-full flex flex-col rounded-3xl border border-[var(--border)] overflow-hidden hover:border-[var(--border-2)] hover:shadow-2xl transition-all duration-300"
                       style={{ background: "linear-gradient(135deg, var(--card) 0%, var(--card-2) 100%)" }}
